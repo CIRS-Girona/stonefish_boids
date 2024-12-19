@@ -38,12 +38,13 @@ RRT::RRT()
     planner_ = (std::make_shared<og::RRT>(si));
     planner_->params().setParam("range", "0.5");
     planner_->params().setParam("intermediate_states", "1");
-    planner_->getSpecs();
+    planner_->params().setParam("goal_bias", "0.005");
+    // planner_->getSpecs();
     ss_->setPlanner(planner_);
 
     std::cout << "printing setup\n";
     ss_->setup();
-    ss_->print();
+    // ss_->print();
     std::cout << "done printing setup\n";
     std::cout << "loaded RRT planner\n\n";
 }
