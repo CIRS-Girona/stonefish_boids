@@ -24,6 +24,8 @@ include(./macros)
 find_package(catkin REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Stonefish)
+message("Stonefish found? ${Stonefish_FOUND}")
+message("2 ${Stonefish_lib}")
 
 find_package(ompl)
 message("ompl print")
@@ -99,10 +101,8 @@ add_library(${PROJECT_NAME}
   src/RRT.cpp
 )
 
-# target_link_libraries(${PROJECT_NAME} BT::behaviortree_cpp_v3  ${catkin_LIBRARIES})
-
 # add_dependencies(cirs_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})
-target_link_libraries(cirs_boids ${catkin_LIBRARIES} ${LIBRARIES})
+target_link_libraries(cirs_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
 add_executable(viz_boids scripts/viz_boids.cpp)
 target_link_libraries(viz_boids cirs_boids)
