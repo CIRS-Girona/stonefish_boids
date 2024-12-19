@@ -65,7 +65,7 @@ std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f 
     goal_stt[2] = goal[2];
     std::cout << "requesting solution to:\n\n";
     ss_->setStartAndGoalStates(start_stt, goal_stt);
-    ss_->print();
+    // ss_->print();
 
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     // attempt to solve the problem
