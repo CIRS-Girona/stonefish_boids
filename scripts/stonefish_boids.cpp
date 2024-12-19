@@ -15,6 +15,13 @@
 #include <cirs_boids/RRT.hpp>
 #include <thread>
 
+struct Flock
+{
+    Boids boids;
+    std::vector<sf::ManualTrajectory *> boidTrajs;
+    std::vector<Eigen::Vector3f> leaderPath;
+};
+
 class MyManager : public sf::ROSSimulationManager
 {
 private:
@@ -25,6 +32,8 @@ private:
     const double worldSize = 2.0;
     std::vector<Boids> flocks;
     std::vector<std::thread> threads;
+
+    std::vector<Flock> flojs;
 
     sf::AnimatedEntity *anim;
     sf::ManualTrajectory *leader_traj;
@@ -136,7 +145,7 @@ void MyManager::MakeFishes()
 
         flocks.push_back(flock);
 
-        break;
+        // break;
     }
 
     CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
