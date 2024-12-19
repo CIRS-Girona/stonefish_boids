@@ -64,7 +64,7 @@ void MyManager::UpdateGroup(Flock flock)
 void MyManager::timerCb(const ros::TimerEvent &evt)
 {
 
-    std::thread th(&MyManager::UpdateGroup, this, groups.at(0));
+    // std::thread th(&MyManager::UpdateGroup, this, groups.at(0));
 
     // for (auto &flock : groups)
     // {
