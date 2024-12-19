@@ -12,6 +12,7 @@
 #include <Stonefish/entities/animation/ManualTrajectory.h>
 
 #include <cirs_boids/Flock.hpp>
+#include <thread>
 
 class MyManager : public sf::ROSSimulationManager
 {
@@ -21,8 +22,8 @@ private:
 
     int numBoids = 20;
     const double worldSize = 2.0;
-    // const double dt = 0.1;
-    std::unique_ptr<Flock> flock;
+    std::vector<Flock> groups;
+    std::vector<std::thread> threads;
 
     sf::AnimatedEntity *anim;
     sf::ManualTrajectory *leader_traj;
@@ -36,6 +37,7 @@ public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
     ~MyManager();
 
+    void UpdateGroup(Flock flock);
     void MakeFishes();
     void BuildScenario();
 };
@@ -54,20 +56,31 @@ MyManager::~MyManager()
 {
 }
 
+void MyManager::UpdateGroup(Flock flock)
+{
+    return;
+}
+
 void MyManager::timerCb(const ros::TimerEvent &evt)
 {
 
-    // flock->setLeaderPosition(Vector3f(5 * sin(inc), 5 * cos(inc), sin(inc) + 2));
-    flock->setLeaderPosition(Vector3f(0, 0, 2));
-    flock->updateBoids(1.0 / 30.0);
-    auto leader_pos = flock->getLeaderPosition();
+    std::thread th(&MyManager::UpdateGroup, this, groups.at(0));
+
+    // for (auto &flock : groups)
+    // {
+    //     threads.push_back(std::thread(&MyManager::UpdateGroup, flock));
+    // }
+
+    groups.at(0).setLeaderPosition(Vector3f(0, 0, 2));
+    groups.at(0).updateBoids(1.0 / 30.0);
+    auto leader_pos = groups.at(0).getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
     leader_traj->setTransform(sf::Transform(ori, point));
 
-    for (int i = 0; i < flock->getBoids().size(); i++)
+    for (int i = 0; i < groups.at(0).getBoids().size(); i++)
     {
-        auto boid = flock->getBoids().at(i);
+        auto boid = groups.at(0).getBoids().at(i);
         sf::Vector3 point(boid.position.x(), boid.position.y(), boid.position.z());
 
         // Orientation as quaternion with no roll
@@ -85,8 +98,6 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
 
         boid_paths.at(i)->setTransform(sf::Transform(ori, point));
     }
-
-    inc++;
 }
 
 void MyManager::MakeFishes()
@@ -101,17 +112,19 @@ void MyManager::MakeFishes()
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         std::cout << boids_cfg[b]["name"] << "\n";
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        flock = std::make_unique<Flock>(numBoids, worldSize, Vector3f(0, 0, 0));
+        Flock flock(numBoids, worldSize, Vector3f(0, 0, 0));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
-        flock->setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
-        flock->setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
-        flock->setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
-        flock->setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
-        flock->setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
-        flock->setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
-        flock->setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
+        flock.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
+        flock.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
+        flock.setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
+        flock.setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
+        flock.setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
+        flock.setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
+        flock.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
+        flock.printSettings();
 
-        flock->printSettings();
+        groups.push_back(flock);
+
         break;
     }
 
@@ -132,6 +145,8 @@ void MyManager::MakeFishes()
     }
 
     std::cout << boid_paths.size() << "\n";
+
+    std::cout << groups.size() << "\n";
     anim = new sf::AnimatedEntity("LeaderFrame", leader_traj);
     AddAnimatedEntity(anim);
 }
