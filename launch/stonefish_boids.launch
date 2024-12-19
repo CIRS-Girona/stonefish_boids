@@ -11,7 +11,7 @@
     <!-- Simulation parameters -->
     <arg name="simulation_data" value="$(find cirs_boids)/resources"/>
     <arg name="scenario_description"
-        value="$(find cirs_boids)/scenarios/boids.scn"/>
+        value="$(find cirs_boids)/scenarios/sand.scn"/>
     <arg name="simulation_rate" value="100.0"/>
     <arg name="graphics_resolution" value="1440 900"/>
     <arg name="graphics_quality" value="low"/>
