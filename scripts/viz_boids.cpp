@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 
-#include <cirs_boids/Flock.hpp>
+#include <cirs_boids/Boids.hpp>
 #include <cirs_boids/RRT.hpp>
 #include <visualization_msgs/MarkerArray.h>
 #include <nav_msgs/Path.h>
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     const double dt = 30.0;
     ros::Rate rate(dt);
 
-    Flock flock(numBoids, worldSize, Vector3f(0, 0, 0));
+    Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
 
     XmlRpc::XmlRpcValue boids_cfg;
     nh.getParam("boids_settings/", boids_cfg);

@@ -97,7 +97,7 @@ list(APPEND LIBRARIES
 )
 
 add_library(${PROJECT_NAME}
-  src/Flock.cpp
+  src/Boids.cpp
   src/RRT.cpp
 )
 

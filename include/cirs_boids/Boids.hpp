@@ -11,7 +11,7 @@ struct Boid
     Vector3f velocity;
 };
 
-class Flock
+class Boids
 {
 private:
     std::vector<Boid> boids;
@@ -39,8 +39,8 @@ private:
     Vector3f limitSpeed(const Vector3f &velocity);
 
 public:
-    // Flock(int numBoids, double worldSize);
-    Flock(int numBoids, double worldSize, const Vector3f &initialLeaderPosition);
+    // Boids(int numBoids, double worldSize);
+    Boids(int numBoids, double worldSize, const Vector3f &initialLeaderPosition);
     void updateBoids(double dt);
 
     const std::vector<Boid> &getBoids() const;

@@ -11,7 +11,8 @@
 #include <Stonefish/entities/AnimatedEntity.h>
 #include <Stonefish/entities/animation/ManualTrajectory.h>
 
-#include <cirs_boids/Flock.hpp>
+#include <cirs_boids/Boids.hpp>
+#include <cirs_boids/RRT.hpp>
 #include <thread>
 
 class MyManager : public sf::ROSSimulationManager
@@ -22,12 +23,13 @@ private:
 
     int numBoids = 20;
     const double worldSize = 2.0;
-    std::vector<Flock> groups;
+    std::vector<Boids> flocks;
     std::vector<std::thread> threads;
 
     sf::AnimatedEntity *anim;
     sf::ManualTrajectory *leader_traj;
     std::vector<sf::ManualTrajectory *> boid_paths;
+    std::vector<Eigen::Vector3f> leaderPath;
 
     ros::Timer timer;
     void timerCb(const ros::TimerEvent &evt);
@@ -37,7 +39,7 @@ public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
     ~MyManager();
 
-    void UpdateGroup(Flock flock);
+    void UpdateGroup(Boids flock);
     void MakeFishes();
     void BuildScenario();
 };
@@ -56,7 +58,7 @@ MyManager::~MyManager()
 {
 }
 
-void MyManager::UpdateGroup(Flock flock)
+void MyManager::UpdateGroup(Boids flock)
 {
     return;
 }
@@ -64,23 +66,32 @@ void MyManager::UpdateGroup(Flock flock)
 void MyManager::timerCb(const ros::TimerEvent &evt)
 {
 
-    // std::thread th(&MyManager::UpdateGroup, this, groups.at(0));
+    // std::thread th(&MyManager::UpdateGroup, this, flocks.at(0));
 
-    // for (auto &flock : groups)
+    // for (auto &flock : flocks)
     // {
     //     threads.push_back(std::thread(&MyManager::UpdateGroup, flock));
     // }
 
-    groups.at(0).setLeaderPosition(Vector3f(0, 0, 2));
-    groups.at(0).updateBoids(1.0 / 30.0);
-    auto leader_pos = groups.at(0).getLeaderPosition();
+    // if (inc > leaderPath.size() - 1)
+    // {
+    //     std::reverse(leaderPath.begin(), leaderPath.end());
+    //     inc = 0;
+    // }
+
+    // flocks.at(0).setLeaderPosition(leaderPath.at(inc));
+    // inc++;
+
+    flocks.at(0).setLeaderPosition(Vector3f(0, 0, 2));
+    flocks.at(0).updateBoids(1.0 / 30.0);
+    auto leader_pos = flocks.at(0).getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
     leader_traj->setTransform(sf::Transform(ori, point));
 
-    for (int i = 0; i < groups.at(0).getBoids().size(); i++)
+    for (int i = 0; i < flocks.at(0).getBoids().size(); i++)
     {
-        auto boid = groups.at(0).getBoids().at(i);
+        auto boid = flocks.at(0).getBoids().at(i);
         sf::Vector3 point(boid.position.x(), boid.position.y(), boid.position.z());
 
         // Orientation as quaternion with no roll
@@ -112,7 +123,7 @@ void MyManager::MakeFishes()
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         std::cout << boids_cfg[b]["name"] << "\n";
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        Flock flock(numBoids, worldSize, Vector3f(0, 0, 0));
+        Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -123,7 +134,7 @@ void MyManager::MakeFishes()
         flock.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
         flock.printSettings();
 
-        groups.push_back(flock);
+        flocks.push_back(flock);
 
         break;
     }
@@ -146,7 +157,11 @@ void MyManager::MakeFishes()
 
     std::cout << boid_paths.size() << "\n";
 
-    std::cout << groups.size() << "\n";
+    std::cout << flocks.size() << "\n";
+
+    RRT rrt;
+    leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(10, 0, 2));
+
     anim = new sf::AnimatedEntity("LeaderFrame", leader_traj);
     AddAnimatedEntity(anim);
 }

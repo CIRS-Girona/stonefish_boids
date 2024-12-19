@@ -46,7 +46,7 @@ void MyManager::MakeFishes()
     const int numBoids = 20;
     const double worldSize = 20.0;
     const double dt = 0.1f;
-    Flock flock(numBoids, worldSize, Vector3f(0, 0, 0));
+    Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
 
     XmlRpc::XmlRpcValue boids_cfg;
     bool gotten = nh.getParam("/boids_settings", boids_cfg);

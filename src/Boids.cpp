@@ -1,4 +1,4 @@
-#include <cirs_boids/Flock.hpp>
+#include <cirs_boids/Boids.hpp>
 
 #include <iostream>
 #include <vector>
@@ -8,7 +8,7 @@
 using Eigen::Vector3f;
 
 // Alignment: Match the velocity of nearby boids
-Vector3f Flock::computeAlignment(const Boid &boid)
+Vector3f Boids::computeAlignment(const Boid &boid)
 {
     Vector3f avgVelocity = Vector3f::Zero();
     int count = 0;
@@ -26,7 +26,7 @@ Vector3f Flock::computeAlignment(const Boid &boid)
 }
 
 // Cohesion: Steer towards the average position of nearby boids
-Vector3f Flock::computeCohesion(const Boid &boid)
+Vector3f Boids::computeCohesion(const Boid &boid)
 {
     Vector3f avgPosition = Vector3f::Zero();
     int count = 0;
@@ -44,7 +44,7 @@ Vector3f Flock::computeCohesion(const Boid &boid)
 }
 
 // Separation: Avoid crowding nearby boids
-Vector3f Flock::computeSeparation(const Boid &boid)
+Vector3f Boids::computeSeparation(const Boid &boid)
 {
     Vector3f repulsion = Vector3f::Zero();
 
@@ -60,14 +60,14 @@ Vector3f Flock::computeSeparation(const Boid &boid)
     return repulsion.normalized();
 }
 
-Vector3f Flock::computeLeaderAttraction(const Boid &boid)
+Vector3f Boids::computeLeaderAttraction(const Boid &boid)
 {
     Vector3f toLeader = leaderPosition - boid.position;
     return toLeader.normalized();
 }
 
 // Limit the speed of a vector to the maximum speed
-Vector3f Flock::limitSpeed(const Vector3f &velocity)
+Vector3f Boids::limitSpeed(const Vector3f &velocity)
 {
     if (velocity.norm() > maxSpeed)
     {
@@ -76,7 +76,7 @@ Vector3f Flock::limitSpeed(const Vector3f &velocity)
     return velocity;
 }
 
-Flock::Flock(int numBoids, double worldSize, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
+Boids::Boids(int numBoids, double worldSize, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -89,7 +89,7 @@ Flock::Flock(int numBoids, double worldSize, const Vector3f &initialLeaderPositi
     }
 }
 
-void Flock::updateBoids(double dt)
+void Boids::updateBoids(double dt)
 {
     std::vector<Vector3f> newVelocities;
 
@@ -112,12 +112,12 @@ void Flock::updateBoids(double dt)
     }
 }
 
-const std::vector<Boid> &Flock::getBoids() const
+const std::vector<Boid> &Boids::getBoids() const
 {
     return boids;
 }
 
-void Flock::printSettings()
+void Boids::printSettings()
 {
     std::cout << "alignmentWeight: " << alignmentWeight << "\n"
               << "cohesionWeight: " << cohesionWeight << "\n"
@@ -128,46 +128,46 @@ void Flock::printSettings()
               << "separationRadius: " << separationRadius << "\n";
 }
 
-void Flock::setLeaderPosition(const Vector3f &position)
+void Boids::setLeaderPosition(const Vector3f &position)
 {
     leaderPosition = position;
 }
 
-const Vector3f &Flock::getLeaderPosition() const
+const Vector3f &Boids::getLeaderPosition() const
 {
     return leaderPosition;
 }
-void Flock::setAlignmentWeight(const double weight)
+void Boids::setAlignmentWeight(const double weight)
 {
     alignmentWeight = weight;
 }
 
-void Flock::setCohesionWeight(const double weight)
+void Boids::setCohesionWeight(const double weight)
 {
     cohesionWeight = weight;
 }
 
-void Flock::setSeparationWeight(const double weight)
+void Boids::setSeparationWeight(const double weight)
 {
     separationWeight = weight;
 }
 
-void Flock::setLeaderAttractionWeight(const double weight)
+void Boids::setLeaderAttractionWeight(const double weight)
 {
     leaderAttractionWeight = weight;
 }
 
-void Flock::setMaxSpeed(const double speed)
+void Boids::setMaxSpeed(const double speed)
 {
     maxSpeed = speed;
 }
 
-void Flock::setPerceptionRadius(const double radius)
+void Boids::setPerceptionRadius(const double radius)
 {
     perceptionRadius = radius;
 }
 
-void Flock::setSeparationRadius(const double radius)
+void Boids::setSeparationRadius(const double radius)
 {
     separationRadius = radius;
 }
