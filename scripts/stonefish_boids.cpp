@@ -17,8 +17,10 @@
 
 struct Flock
 {
-    Boids boids;
+    // Boids boids;
+    std::shared_ptr<Boids> boids;
     std::vector<sf::ManualTrajectory *> boidTrajs;
+    sf::ManualTrajectory *leaderTraj;
     std::vector<Eigen::Vector3f> leaderPath;
 };
 
@@ -30,15 +32,15 @@ private:
 
     int numBoids = 20;
     const double worldSize = 2.0;
-    std::vector<Boids> flocks;
+    // std::vector<Boids> flocks;
     std::vector<std::thread> threads;
 
-    std::vector<Flock> flojs;
+    std::vector<Flock> flocks;
 
     sf::AnimatedEntity *anim;
     sf::ManualTrajectory *leader_traj;
-    std::vector<sf::ManualTrajectory *> boid_paths;
-    std::vector<Eigen::Vector3f> leaderPath;
+    // std::vector<sf::ManualTrajectory *> boid_paths;
+    // std::vector<Eigen::Vector3f> leaderPath;
 
     ros::Timer timer;
     void timerCb(const ros::TimerEvent &evt);
@@ -82,25 +84,25 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
     //     threads.push_back(std::thread(&MyManager::UpdateGroup, flock));
     // }
 
-    // if (inc > leaderPath.size() - 1)
-    // {
-    //     std::reverse(leaderPath.begin(), leaderPath.end());
-    //     inc = 0;
-    // }
+    if (inc > flocks.at(0).leaderPath.size() - 1)
+    {
+        std::reverse(flocks.at(0).leaderPath.begin(), flocks.at(0).leaderPath.end());
+        inc = 0;
+    }
 
-    // flocks.at(0).setLeaderPosition(leaderPath.at(inc));
-    // inc++;
+    flocks.at(0).boids->setLeaderPosition(flocks.at(0).leaderPath.at(inc));
+    inc++;
 
-    flocks.at(0).setLeaderPosition(Vector3f(0, 0, 2));
-    flocks.at(0).updateBoids(1.0 / 30.0);
-    auto leader_pos = flocks.at(0).getLeaderPosition();
+    // flocks.at(0).boids->setLeaderPosition(Vector3f(0, 0, 2));
+    flocks.at(0).boids->updateBoids(1.0 / 30.0);
+    auto leader_pos = flocks.at(0).boids->getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
     leader_traj->setTransform(sf::Transform(ori, point));
 
-    for (int i = 0; i < flocks.at(0).getBoids().size(); i++)
+    for (int i = 0; i < flocks.at(0).boids->getBoids().size(); i++)
     {
-        auto boid = flocks.at(0).getBoids().at(i);
+        auto boid = flocks.at(0).boids->getBoids().at(i);
         sf::Vector3 point(boid.position.x(), boid.position.y(), boid.position.z());
 
         // Orientation as quaternion with no roll
@@ -116,7 +118,7 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
         sf::Quaternion ori(orientation.x(), orientation.y(),
                            orientation.z(), orientation.w());
 
-        boid_paths.at(i)->setTransform(sf::Transform(ori, point));
+        flocks.at(0).boidTrajs.at(i)->setTransform(sf::Transform(ori, point));
     }
 }
 
@@ -126,26 +128,30 @@ void MyManager::MakeFishes()
     XmlRpc::XmlRpcValue boids_cfg;
     bool gotten = nh.getParam("/boids_settings", boids_cfg);
     std::cout << gotten << "\n";
-    int b = 0;
-    for (; b < boids_cfg.size(); b++)
+    // int b = 0;
+    for (int b = 0; b < boids_cfg.size(); b++)
     {
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
-        std::cout << boids_cfg[b]["name"] << "\n";
+        Flock flock;
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
+        flock.boids = std::make_unique<Boids>(numBoids, worldSize, Vector3f(0, 0, 0));
+        // Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
-        flock.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
-        flock.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
-        flock.setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
-        flock.setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
-        flock.setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
-        flock.setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
-        flock.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
-        flock.printSettings();
+        flock.boids->setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
+        flock.boids->setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
+        flock.boids->setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
+        flock.boids->setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
+        flock.boids->setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
+        flock.boids->setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
+        flock.boids->setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
+        flock.boids->printSettings();
+
+        RRT rrt;
+        flock.leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(5, 0, 2));
+        anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), leader_traj);
+        AddAnimatedEntity(anim);
 
         flocks.push_back(flock);
-
-        // break;
     }
 
     CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
@@ -154,9 +160,9 @@ void MyManager::MakeFishes()
     for (int i = 0; i < numBoids; i++)
     {
         sf::ManualTrajectory *traj = new sf::ManualTrajectory();
-        boid_paths.push_back(traj);
+        flocks.at(0).boidTrajs.push_back(traj);
 
-        anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), boid_paths.at(i),
+        anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flocks.at(0).boidTrajs.at(i),
                                       sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
                                       1.0, sf::I4(),
                                       sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
@@ -164,15 +170,9 @@ void MyManager::MakeFishes()
         AddAnimatedEntity(anim);
     }
 
-    std::cout << boid_paths.size() << "\n";
+    // std::cout << boid_paths.size() << "\n";
 
     std::cout << flocks.size() << "\n";
-
-    RRT rrt;
-    leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(10, 0, 2));
-
-    anim = new sf::AnimatedEntity("LeaderFrame", leader_traj);
-    AddAnimatedEntity(anim);
 }
 
 void MyManager::BuildScenario()
