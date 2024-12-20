@@ -11,8 +11,8 @@
 #include <Stonefish/entities/AnimatedEntity.h>
 #include <Stonefish/entities/animation/ManualTrajectory.h>
 
-#include <cirs_boids/Boids.hpp>
-#include <cirs_boids/RRT.hpp>
+#include <stonefish_boids/Boids.hpp>
+#include <stonefish_boids/RRT.hpp>
 #include <thread>
 
 struct Flock

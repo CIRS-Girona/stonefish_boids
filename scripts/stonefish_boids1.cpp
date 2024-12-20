@@ -11,7 +11,7 @@
 #include <Stonefish/entities/AnimatedEntity.h>
 #include <Stonefish/entities/animation/BSTrajectory.h>
 
-#include <cirs_boids/Flock.hpp>
+#include <stonefish_boids/Flock.hpp>
 
 class MyManager : public sf::ROSSimulationManager
 {

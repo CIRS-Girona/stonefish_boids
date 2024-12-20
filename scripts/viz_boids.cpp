@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 
-#include <cirs_boids/Boids.hpp>
-#include <cirs_boids/RRT.hpp>
+#include <stonefish_boids/Boids.hpp>
+#include <stonefish_boids/RRT.hpp>
 #include <visualization_msgs/MarkerArray.h>
 #include <nav_msgs/Path.h>
 

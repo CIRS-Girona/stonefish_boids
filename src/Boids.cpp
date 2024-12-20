@@ -1,4 +1,4 @@
-#include <cirs_boids/Boids.hpp>
+#include <stonefish_boids/Boids.hpp>
 
 #include <iostream>
 #include <vector>

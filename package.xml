@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>cirs_boids</name>
+  <name>stonefish_boids</name>
   <version>0.0.0</version>
-  <description>The cirs_boids package</description>
+  <description>The stonefish_boids package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/cirs_boids</url> -->
+  <!-- <url type="website">http://wiki.ros.org/stonefish_boids</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->

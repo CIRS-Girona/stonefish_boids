@@ -1,4 +1,4 @@
-#include <cirs_boids/RRT.hpp>
+#include <stonefish_boids/RRT.hpp>
 
 #include <Eigen/Dense>
 #include <vector>

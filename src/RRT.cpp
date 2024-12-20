@@ -1,4 +1,4 @@
-#include <cirs_boids/RRT.hpp>
+#include <stonefish_boids/RRT.hpp>
 
 #include <ompl/base/SpaceInformation.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
