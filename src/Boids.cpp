@@ -76,19 +76,6 @@ Vector3f Boids::limitSpeed(const Vector3f &velocity)
     return velocity;
 }
 
-Boids::Boids(int numBoids, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
-{
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(-2.0, 2.0);
-
-    for (int i = 0; i < numBoids; i++)
-    {
-        boids.push_back({Vector3f(dis(gen), dis(gen), 1),
-                         Vector3f(dis(gen) * 0.1f, dis(gen) * 0.1f, dis(gen) * 0.1f)});
-    }
-}
-
 void Boids::updateBoids(double dt)
 {
     std::vector<Vector3f> newVelocities;
@@ -109,6 +96,24 @@ void Boids::updateBoids(double dt)
     {
         boids[i].velocity = newVelocities[i];
         boids[i].position += boids[i].velocity * dt;
+    }
+}
+
+Boids::Boids()
+{
+    std::cout << "default boids constructor" << "\n";
+}
+
+Boids::Boids(int numBoids, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(-2.0, 2.0);
+
+    for (int i = 0; i < numBoids; i++)
+    {
+        boids.push_back({Vector3f(dis(gen), dis(gen), 1),
+                         Vector3f(dis(gen) * 0.1f, dis(gen) * 0.1f, dis(gen) * 0.1f)});
     }
 }
 

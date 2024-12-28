@@ -39,7 +39,7 @@ private:
     Vector3f limitSpeed(const Vector3f &velocity);
 
 public:
-    // Boids(int numBoids, double worldSize);
+    Boids();
     Boids(int numBoids, const Vector3f &initialLeaderPosition);
     void updateBoids(double dt);
 
