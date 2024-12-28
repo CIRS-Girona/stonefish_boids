@@ -31,8 +31,6 @@ private:
     ros::ServiceServer service;
 
     int numBoids = 20;
-    const double worldSize = 2.0;
-    // std::vector<Boids> flocks;
     std::vector<std::thread> threads;
 
     std::vector<Flock> flocks;
@@ -134,8 +132,7 @@ void MyManager::MakeFishes()
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         Flock flock;
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        flock.boids = std::make_unique<Boids>(numBoids, worldSize, Vector3f(0, 0, 0));
-        // Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
+        flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock.boids->setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock.boids->setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));

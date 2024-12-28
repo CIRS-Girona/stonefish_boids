@@ -40,7 +40,7 @@ private:
 
 public:
     // Boids(int numBoids, double worldSize);
-    Boids(int numBoids, double worldSize, const Vector3f &initialLeaderPosition);
+    Boids(int numBoids, const Vector3f &initialLeaderPosition);
     void updateBoids(double dt);
 
     const std::vector<Boid> &getBoids() const;

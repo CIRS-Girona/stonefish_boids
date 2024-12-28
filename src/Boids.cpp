@@ -76,11 +76,11 @@ Vector3f Boids::limitSpeed(const Vector3f &velocity)
     return velocity;
 }
 
-Boids::Boids(int numBoids, double worldSize, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
+Boids::Boids(int numBoids, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(-worldSize, worldSize);
+    std::uniform_real_distribution<double> dis(-2.0, 2.0);
 
     for (int i = 0; i < numBoids; i++)
     {
