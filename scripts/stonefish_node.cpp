@@ -18,7 +18,8 @@
 struct Flock
 {
     // Boids boids;
-    std::shared_ptr<Boids> boids;
+    // std::shared_ptr<Boids> boids;
+    Boids boids;
     std::vector<sf::ManualTrajectory *> boidTrajs;
     sf::ManualTrajectory *leaderTraj;
     std::vector<Eigen::Vector3f> leaderPath;
@@ -33,7 +34,7 @@ private:
     int numBoids = 20;
     std::vector<std::thread> threads;
 
-    std::vector<Flock> flocks;
+    std::vector<std::shared_ptr<Flock>> flocks;
 
     sf::AnimatedEntity *anim;
     sf::ManualTrajectory *leader_traj;
@@ -48,7 +49,7 @@ public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
     ~MyManager();
 
-    void UpdateGroup(Boids flock);
+    void UpdateGroup(Flock flock);
     void MakeFishes();
     void BuildScenario();
 };
@@ -67,40 +68,42 @@ MyManager::~MyManager()
 {
 }
 
-void MyManager::UpdateGroup(Boids flock)
+void MyManager::UpdateGroup(Flock flock)
 {
-    return;
+    flock.boids.printSettings();
 }
 
 void MyManager::timerCb(const ros::TimerEvent &evt)
 {
-
-    // std::thread th(&MyManager::UpdateGroup, this, flocks.at(0));
+    auto flock = flocks.at(0);
+    // std::thread th(&MyManager::UpdateGroup, this, &flock);
+    // std::cout << "whatever" << "\n";
+    // th.join();
 
     // for (auto &flock : flocks)
     // {
     //     threads.push_back(std::thread(&MyManager::UpdateGroup, flock));
     // }
 
-    if (inc > flocks.at(0).leaderPath.size() - 1)
+    if (inc > flocks.at(0)->leaderPath.size() - 1)
     {
-        std::reverse(flocks.at(0).leaderPath.begin(), flocks.at(0).leaderPath.end());
+        std::reverse(flocks.at(0)->leaderPath.begin(), flocks.at(0)->leaderPath.end());
         inc = 0;
     }
 
-    flocks.at(0).boids->setLeaderPosition(flocks.at(0).leaderPath.at(inc));
+    flocks.at(0)->boids.setLeaderPosition(flocks.at(0)->leaderPath.at(inc));
     inc++;
 
-    // flocks.at(0).boids->setLeaderPosition(Vector3f(0, 0, 2));
-    flocks.at(0).boids->updateBoids(1.0 / 30.0);
-    auto leader_pos = flocks.at(0).boids->getLeaderPosition();
+    // flocks.at(0)->boids.setLeaderPosition(Vector3f(0, 0, 2));
+    flocks.at(0)->boids.updateBoids(1.0 / 30.0);
+    auto leader_pos = flocks.at(0)->boids.getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
     leader_traj->setTransform(sf::Transform(ori, point));
 
-    for (int i = 0; i < flocks.at(0).boids->getBoids().size(); i++)
+    for (int i = 0; i < flocks.at(0)->boids.getBoids().size(); i++)
     {
-        auto boid = flocks.at(0).boids->getBoids().at(i);
+        auto boid = flocks.at(0)->boids.getBoids().at(i);
         sf::Vector3 point(boid.position.x(), boid.position.y(), boid.position.z());
 
         // Orientation as quaternion with no roll
@@ -116,7 +119,7 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
         sf::Quaternion ori(orientation.x(), orientation.y(),
                            orientation.z(), orientation.w());
 
-        flocks.at(0).boidTrajs.at(i)->setTransform(sf::Transform(ori, point));
+        flocks.at(0)->boidTrajs.at(i)->setTransform(sf::Transform(ori, point));
     }
 }
 
@@ -130,21 +133,23 @@ void MyManager::MakeFishes()
     for (int b = 0; b < boids_cfg.size(); b++)
     {
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
-        Flock flock;
+        // Flock flock;
+        auto flock = std::make_shared<Flock>();
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
+        // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
+        flock->boids = Boids(numBoids, Vector3f(0, 0, 0));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
-        flock.boids->setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
-        flock.boids->setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
-        flock.boids->setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
-        flock.boids->setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
-        flock.boids->setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
-        flock.boids->setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
-        flock.boids->setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
-        flock.boids->printSettings();
+        flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
+        flock->boids.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
+        flock->boids.setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
+        flock->boids.setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
+        flock->boids.setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
+        flock->boids.setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
+        flock->boids.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
+        flock->boids.printSettings();
 
         RRT rrt;
-        flock.leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(5, 0, 2));
+        flock->leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(5, 0, 2));
         anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), leader_traj);
         AddAnimatedEntity(anim);
 
@@ -157,9 +162,9 @@ void MyManager::MakeFishes()
     for (int i = 0; i < numBoids; i++)
     {
         sf::ManualTrajectory *traj = new sf::ManualTrajectory();
-        flocks.at(0).boidTrajs.push_back(traj);
+        flocks.at(0)->boidTrajs.push_back(traj);
 
-        anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flocks.at(0).boidTrajs.at(i),
+        anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flocks.at(0)->boidTrajs.at(i),
                                       sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
                                       1.0, sf::I4(),
                                       sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
