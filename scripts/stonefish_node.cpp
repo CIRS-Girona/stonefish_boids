@@ -71,6 +71,14 @@ MyManager::MyManager(sf::Scalar rate, std::string scenarioPath) : ROSSimulationM
 
 MyManager::~MyManager()
 {
+    std::cout << "killing fishes" << "\n";
+    for (auto &th : threads)
+    {
+        if (th.joinable())
+        {
+            th.join();
+        }
+    }
 }
 
 void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
