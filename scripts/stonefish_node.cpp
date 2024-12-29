@@ -19,10 +19,12 @@ struct Flock
 {
     // Boids boids;
     // std::shared_ptr<Boids> boids;
+    std::string flockName;
     Boids boids;
     std::vector<sf::ManualTrajectory *> boidTrajs;
     sf::ManualTrajectory *leaderTraj;
     std::vector<Eigen::Vector3f> leaderPath;
+    int leaderPathIndex;
 };
 
 class MyManager : public sf::ROSSimulationManager
@@ -37,19 +39,19 @@ private:
     std::vector<std::shared_ptr<Flock>> flocks;
 
     sf::AnimatedEntity *anim;
-    sf::ManualTrajectory *leader_traj;
+    // sf::ManualTrajectory *leader_traj;
     // std::vector<sf::ManualTrajectory *> boid_paths;
     // std::vector<Eigen::Vector3f> leaderPath;
 
     ros::Timer timer;
     void timerCb(const ros::TimerEvent &evt);
-    float inc = 0;
+    // float inc = 0;
 
 public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
     ~MyManager();
 
-    void UpdateGroup(Flock flock);
+    void UpdateGroup(std::shared_ptr<Flock> flock);
     void MakeFishes();
     void BuildScenario();
 };
@@ -60,7 +62,7 @@ MyManager::MyManager(sf::Scalar rate, std::string scenarioPath) : ROSSimulationM
     std::cout << rate << "\n";
     std::cout << scenarioPath << "\n";
 
-    leader_traj = new sf::ManualTrajectory();
+    // leader_traj = new sf::ManualTrajectory();
     timer = nh.createTimer(ros::Duration(1.0 / 30.0), &MyManager::timerCb, this);
 }
 
@@ -68,42 +70,29 @@ MyManager::~MyManager()
 {
 }
 
-void MyManager::UpdateGroup(Flock flock)
+void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
 {
-    flock.boids.printSettings();
-}
+    // std::cout << flock->flockName << "\n";
 
-void MyManager::timerCb(const ros::TimerEvent &evt)
-{
-    auto flock = flocks.at(0);
-    // std::thread th(&MyManager::UpdateGroup, this, &flock);
-    // std::cout << "whatever" << "\n";
-    // th.join();
-
-    // for (auto &flock : flocks)
-    // {
-    //     threads.push_back(std::thread(&MyManager::UpdateGroup, flock));
-    // }
-
-    if (inc > flocks.at(0)->leaderPath.size() - 1)
+    if (flock->leaderPathIndex > flock->leaderPath.size() - 1)
     {
-        std::reverse(flocks.at(0)->leaderPath.begin(), flocks.at(0)->leaderPath.end());
-        inc = 0;
+        std::reverse(flock->leaderPath.begin(), flock->leaderPath.end());
+        flock->leaderPathIndex = 0;
     }
 
-    flocks.at(0)->boids.setLeaderPosition(flocks.at(0)->leaderPath.at(inc));
-    inc++;
+    flock->boids.setLeaderPosition(flock->leaderPath.at(flock->leaderPathIndex));
+    flock->leaderPathIndex++;
 
-    // flocks.at(0)->boids.setLeaderPosition(Vector3f(0, 0, 2));
-    flocks.at(0)->boids.updateBoids(1.0 / 30.0);
-    auto leader_pos = flocks.at(0)->boids.getLeaderPosition();
+    // flock->boids.setLeaderPosition(Vector3f(0, 0, 2));
+    flock->boids.updateBoids(1.0 / 30.0);
+    auto leader_pos = flock->boids.getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
-    leader_traj->setTransform(sf::Transform(ori, point));
+    flock->leaderTraj->setTransform(sf::Transform(ori, point));
 
-    for (int i = 0; i < flocks.at(0)->boids.getBoids().size(); i++)
+    for (int i = 0; i < flock->boids.getBoids().size(); i++)
     {
-        auto boid = flocks.at(0)->boids.getBoids().at(i);
+        auto boid = flock->boids.getBoids().at(i);
         sf::Vector3 point(boid.position.x(), boid.position.y(), boid.position.z());
 
         // Orientation as quaternion with no roll
@@ -119,7 +108,22 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
         sf::Quaternion ori(orientation.x(), orientation.y(),
                            orientation.z(), orientation.w());
 
-        flocks.at(0)->boidTrajs.at(i)->setTransform(sf::Transform(ori, point));
+        flock->boidTrajs.at(i)->setTransform(sf::Transform(ori, point));
+    }
+}
+
+void MyManager::timerCb(const ros::TimerEvent &evt)
+{
+
+    // crear vector de threads aca?
+    threads.clear();
+    for (auto flock : flocks)
+    {
+        threads.push_back(std::thread(&MyManager::UpdateGroup, this, flock));
+    }
+    for (auto &th : threads)
+    {
+        th.join();
     }
 }
 
@@ -135,6 +139,7 @@ void MyManager::MakeFishes()
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         // Flock flock;
         auto flock = std::make_shared<Flock>();
+        flock->flockName = std::string(boids_cfg[b]["name"]);
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
         flock->boids = Boids(numBoids, Vector3f(0, 0, 0));
@@ -150,7 +155,8 @@ void MyManager::MakeFishes()
 
         RRT rrt;
         flock->leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(5, 0, 2));
-        anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), leader_traj);
+        flock->leaderTraj = new sf::ManualTrajectory();
+        anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), flock->leaderTraj);
         AddAnimatedEntity(anim);
 
         flocks.push_back(flock);
@@ -159,20 +165,21 @@ void MyManager::MakeFishes()
     CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
                sf::GetDataPath() + "creatures/yellowtang/yellowtang.png");
     // create control ptr for every boid
-    for (int i = 0; i < numBoids; i++)
+    for (auto flock : flocks)
     {
-        sf::ManualTrajectory *traj = new sf::ManualTrajectory();
-        flocks.at(0)->boidTrajs.push_back(traj);
+        for (int i = 0; i < flock->boids.getBoids().size(); i++)
+        {
+            sf::ManualTrajectory *traj = new sf::ManualTrajectory();
+            flock->boidTrajs.push_back(traj);
 
-        anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flocks.at(0)->boidTrajs.at(i),
-                                      sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
-                                      1.0, sf::I4(),
-                                      sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
-                                      1.0, sf::I4(), "Neutral", "fishtex");
-        AddAnimatedEntity(anim);
+            anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flock->boidTrajs.at(i),
+                                          sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
+                                          1.0, sf::I4(),
+                                          sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
+                                          1.0, sf::I4(), "Neutral", "fishtex");
+            AddAnimatedEntity(anim);
+        }
     }
-
-    // std::cout << boid_paths.size() << "\n";
 
     std::cout << flocks.size() << "\n";
 }
