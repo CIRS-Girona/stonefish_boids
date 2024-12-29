@@ -5,3 +5,9 @@ Boids algorithm C++ implementation to simulate school of fish behavior in [Stone
 <div align="center">
   <img src="https://github.com/CIRS-Girona/stonefish_boids/blob/main/media/peixos.gif" width=1200 />
 </div>
+
+<div align="center">
+  <img src="https://github.com/CIRS-Girona/stonefish_boids/blob/main/media/morepeixos.gif" width=1200 />
+</div>
+
+
