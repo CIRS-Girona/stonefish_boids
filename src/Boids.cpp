@@ -112,7 +112,9 @@ Boids::Boids(int numBoids, const Vector3f &initialLeaderPosition) : leaderPositi
 
     for (int i = 0; i < numBoids; i++)
     {
-        boids.push_back({Vector3f(dis(gen), dis(gen), 1),
+        boids.push_back({Vector3f(dis(gen) + leaderPosition[0],
+                                  dis(gen) + leaderPosition[1],
+                                  leaderPosition[2]),
                          Vector3f(dis(gen) * 0.1f, dis(gen) * 0.1f, dis(gen) * 0.1f)});
     }
 }

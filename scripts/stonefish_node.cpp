@@ -52,6 +52,9 @@ public:
     ~MyManager();
 
     void UpdateGroup(std::shared_ptr<Flock> flock);
+    Eigen::Vector3f randomVector3f(const std::vector<float> &xlim,
+                                   const std::vector<float> &ylim,
+                                   const std::vector<float> &zlim);
     void MakeFishes();
     void BuildScenario();
 };
@@ -127,8 +130,24 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
     }
 }
 
+Eigen::Vector3f MyManager::randomVector3f(const std::vector<float> &xlim,
+                                          const std::vector<float> &ylim,
+                                          const std::vector<float> &zlim)
+{
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> disx(xlim[0], xlim[1]);
+    std::uniform_real_distribution<double> disy(ylim[0], ylim[1]);
+    std::uniform_real_distribution<double> disz(zlim[0], zlim[1]);
+
+    return Eigen::Vector3f(disx(gen), disy(gen), disz(gen));
+}
+
 void MyManager::MakeFishes()
 {
+    Eigen::IOFormat CommaInitFmt(Eigen::StreamPrecision, Eigen::DontAlignCols,
+                                 ", ", ", ", "", "", " << ", ";");
 
     XmlRpc::XmlRpcValue boids_cfg;
     bool gotten = nh.getParam("/boids_settings", boids_cfg);
@@ -142,7 +161,8 @@ void MyManager::MakeFishes()
         flock->flockName = std::string(boids_cfg[b]["name"]);
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
-        flock->boids = Boids(numBoids, Vector3f(0, 0, 0));
+        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {2, 5}));
+        flock->boids = Boids(numBoids, initPoint);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock->boids.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -154,7 +174,10 @@ void MyManager::MakeFishes()
         flock->boids.printSettings();
 
         RRT rrt;
-        flock->leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(5, 0, 2));
+        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}));
+        std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
+        std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
+        flock->leaderPath = rrt.doPlan(initPoint, endPoint);
         flock->leaderTraj = new sf::ManualTrajectory();
         anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), flock->leaderTraj);
         AddAnimatedEntity(anim);
