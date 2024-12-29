@@ -193,23 +193,28 @@ void MyManager::MakeFishes()
         flocks.push_back(flock);
     }
 
-    CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
-               sf::GetDataPath() + "creatures/yellowtang/yellowtang.png");
+    // CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
+    //            sf::GetDataPath() + "creatures/yellowtang/yellowtang.png");
     // create control ptr for every boid
+    int b = 0;
     for (auto flock : flocks)
     {
+        CreateLook(flock->flockName + "tex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
+                   sf::GetDataPath() + std::string(boids_cfg[b]["texturePath"]));
+
         for (int i = 0; i < flock->boids.getBoids().size(); i++)
         {
             sf::ManualTrajectory *traj = new sf::ManualTrajectory();
             flock->boidTrajs.push_back(traj);
 
             anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flock->boidTrajs.at(i),
-                                          sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
+                                          sf::GetDataPath() + std::string(boids_cfg[b]["modelPath"]),
                                           1.0, sf::I4(),
-                                          sf::GetDataPath() + "creatures/yellowtang/yellowtang.obj",
-                                          1.0, sf::I4(), "Neutral", "fishtex");
+                                          sf::GetDataPath() + std::string(boids_cfg[b]["modelPath"]),
+                                          1.0, sf::I4(), "Neutral", flock->flockName + "tex");
             AddAnimatedEntity(anim);
         }
+        b++;
     }
 
     std::cout << flocks.size() << "\n";
