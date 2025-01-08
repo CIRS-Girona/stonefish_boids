@@ -101,7 +101,7 @@ void Boids::updateBoids(double dt)
 
 Boids::Boids()
 {
-    std::cout << "default boids constructor" << "\n";
+    // std::cout << "default boids constructor" << "\n";
 }
 
 Boids::Boids(int numBoids, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
