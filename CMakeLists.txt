@@ -46,7 +46,6 @@ list(APPEND CATKIN_SOURCES
     std_msgs
     geometry_msgs
     rosbag
-    rviz_visual_tools
     stonefish_ros
   )
 

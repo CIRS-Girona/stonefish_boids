@@ -45,8 +45,6 @@
   <depend>geometry_msgs</depend>
   <depend>stonefish_ros</depend>
 
-  <depend>rviz_visual_tools</depend>
-
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
 
