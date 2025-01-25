@@ -17,7 +17,7 @@
     <arg name="graphics_quality" value="low"/>
 
     <!-- Run Simulator -->
-    <node name="stonefish_simulator" pkg="stonefish_boids" type="stonefish_node"
+    <node name="stonefish_simulator" pkg="stonefish_boids" type="stonefish_node2"
         args="$(arg simulation_data) $(arg scenario_description)
                   $(arg simulation_rate) $(arg graphics_resolution) 
                   $(arg graphics_quality)"

@@ -98,6 +98,7 @@ list(APPEND LIBRARIES
 
 add_library(${PROJECT_NAME}
   src/Boids.cpp
+  src/Boids2.cpp
   src/RRT.cpp
 )
 
@@ -109,6 +110,9 @@ target_link_libraries(viz_boids stonefish_boids)
 
 add_executable(stonefish_node scripts/stonefish_node.cpp)
 target_link_libraries(stonefish_node stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+
+add_executable(stonefish_node2 scripts/stonefish_node2.cpp)
+target_link_libraries(stonefish_node2 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
 # add_script(test scripts)
 
