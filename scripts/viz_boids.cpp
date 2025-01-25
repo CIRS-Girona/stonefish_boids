@@ -1,9 +1,93 @@
 #include <ros/ros.h>
 
-#include <stonefish_boids/Boids.hpp>
+#include <stonefish_boids/Boids2.hpp>
 #include <stonefish_boids/RRT.hpp>
 #include <visualization_msgs/MarkerArray.h>
 #include <nav_msgs/Path.h>
+
+visualization_msgs::Marker drawPose(Boid2 boid, int id)
+{
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = "world_ned";
+    marker.header.stamp = ros::Time::now();
+    marker.ns = "boids";
+    marker.id = id;
+    marker.type = visualization_msgs::Marker::ARROW;
+    marker.action = visualization_msgs::Marker::ADD;
+
+    // Arrow position and orientation
+    marker.pose.position.x = boid.position.x();
+    marker.pose.position.y = boid.position.y();
+    marker.pose.position.z = boid.position.z();
+
+    // Orientation as quaternion
+    Vector3f direction = boid.velocity.normalized();
+    Eigen::Quaternionf orientation;
+    orientation.setFromTwoVectors(Vector3f::UnitX(), direction);
+    marker.pose.orientation.x = orientation.x();
+    marker.pose.orientation.y = orientation.y();
+    marker.pose.orientation.z = orientation.z();
+    marker.pose.orientation.w = orientation.w();
+
+    // Arrow size
+    marker.scale.x = 0.5; // Length of the arrow shaft
+    marker.scale.y = 0.1; // Width of the arrow shaft
+    marker.scale.z = 0.1; // Width of the arrow head
+
+    // Color
+    marker.color.r = 1.0;
+    marker.color.g = 0.5;
+    marker.color.b = 0.2;
+    marker.color.a = 1.0;
+
+    if (id == 0)
+    {
+        marker.color.g = 1;
+    }
+
+    return marker;
+}
+
+visualization_msgs::Marker drawForce(Boid2 boid, int id, double mass)
+{
+
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = "world_ned";
+    marker.header.stamp = ros::Time::now();
+    marker.ns = "boidsF";
+    marker.id = id;
+    marker.type = visualization_msgs::Marker::ARROW;
+    marker.action = visualization_msgs::Marker::ADD;
+
+    // Arrow position and orientation
+    marker.pose.position.x = boid.position.x();
+    marker.pose.position.y = boid.position.y();
+    marker.pose.position.z = boid.position.z();
+
+    // Orientation as quaternion
+    Vector3f direction = boid.aceleration.normalized();
+    Eigen::Quaternionf orientation;
+    orientation.setFromTwoVectors(Vector3f::UnitX(), direction);
+    marker.pose.orientation.x = orientation.x();
+    marker.pose.orientation.y = orientation.y();
+    marker.pose.orientation.z = orientation.z();
+    marker.pose.orientation.w = orientation.w();
+
+    // Arrow size
+    marker.scale.x = boid.aceleration.norm();
+    // std::cout << boid.aceleration.norm() << "\n";
+    // std::cout << boid.aceleration.norm() << "\n";
+    marker.scale.y = 0.05; // Width of the arrow shaft
+    marker.scale.z = 0.05; // Width of the arrow head
+
+    // Color
+    marker.color.r = 1.0;
+    marker.color.g = 0.0;
+    marker.color.b = 0.0;
+    marker.color.a = 1.0;
+
+    return marker;
+}
 
 int main(int argc, char **argv)
 {
@@ -14,13 +98,10 @@ int main(int argc, char **argv)
     ros::Publisher leaderMarkerPub = nh.advertise<visualization_msgs::Marker>("leader_marker", 10);
     ros::Publisher leaderPathPub = nh.advertise<nav_msgs::Path>("leaderPath", 10, true);
 
-    const int numBoids = 20;
     const double worldSize = 2.0;
     const double dt = 30.0;
     ros::Rate rate(dt);
-
-    Boids flock(numBoids, worldSize, Vector3f(0, 0, 0));
-
+    Boids2 flock;
     XmlRpc::XmlRpcValue boids_cfg;
     nh.getParam("boids_settings/", boids_cfg);
     int b = 0;
@@ -28,15 +109,18 @@ int main(int argc, char **argv)
     {
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         std::cout << boids_cfg[b]["name"] << "\n";
+        int numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
+        flock = Boids2(numBoids, Vector3f(0, 0, 2));
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
         flock.setSeparationWeight(static_cast<double>(boids_cfg[b]["separationWeight"]));
         flock.setLeaderAttractionWeight(static_cast<double>(boids_cfg[b]["leaderAttractionWeight"]));
         flock.setMaxSpeed(static_cast<double>(boids_cfg[b]["maxSpeed"]));
+        flock.setMaxAccel(static_cast<double>(boids_cfg[b]["maxAccel"]));
         flock.setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
         flock.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
-
+        flock.setMass(static_cast<double>(boids_cfg[b]["mass"]));
         flock.printSettings();
         break;
     }
@@ -71,6 +155,7 @@ int main(int argc, char **argv)
         }
 
         flock.setLeaderPosition(leaderPath.at(inc));
+        // flock.setLeaderPosition(Vector3f(0, 0, 2));
         inc++;
         flock.updateBoids(1.0 / dt);
 
@@ -79,40 +164,9 @@ int main(int argc, char **argv)
 
         for (const auto &boid : flock.getBoids())
         {
-            visualization_msgs::Marker marker;
-            marker.header.frame_id = "world_ned";
-            marker.header.stamp = ros::Time::now();
-            marker.ns = "boids";
-            marker.id = id++;
-            marker.type = visualization_msgs::Marker::ARROW;
-            marker.action = visualization_msgs::Marker::ADD;
-
-            // Arrow position and orientation
-            marker.pose.position.x = boid.position.x();
-            marker.pose.position.y = boid.position.y();
-            marker.pose.position.z = boid.position.z();
-
-            // Orientation as quaternion
-            Vector3f direction = boid.velocity.normalized();
-            Eigen::Quaternionf orientation;
-            orientation.setFromTwoVectors(Vector3f::UnitX(), direction);
-            marker.pose.orientation.x = orientation.x();
-            marker.pose.orientation.y = orientation.y();
-            marker.pose.orientation.z = orientation.z();
-            marker.pose.orientation.w = orientation.w();
-
-            // Arrow size
-            marker.scale.x = 0.5; // Length of the arrow shaft
-            marker.scale.y = 0.1; // Width of the arrow shaft
-            marker.scale.z = 0.1; // Width of the arrow head
-
-            // Color
-            marker.color.r = 1.0;
-            marker.color.g = 0.5;
-            marker.color.b = 0.2;
-            marker.color.a = 1.0;
-
-            markerArray.markers.push_back(marker);
+            markerArray.markers.push_back(drawPose(boid, id));
+            markerArray.markers.push_back(drawForce(boid, id, flock.getMass()));
+            id++;
         }
 
         markerArrayPub.publish(markerArray);
