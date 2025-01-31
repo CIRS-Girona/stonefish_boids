@@ -9,8 +9,8 @@ boids_settings:
     leaderAttractionWeight: 2.0
     maxSpeed: 2.0
     maxAccel: 10.0
-    perceptionRadius : 1.0
-    separationRadius : 1.5
+    perceptionRadius : 0.5
+    separationRadius : 0.7
     mass : 1.0
 
   # - name: "bluefin"
@@ -36,3 +36,17 @@ boids_settings:
   #   maxSpeed: 2.0
   #   perceptionRadius : 0.3
   #   separationRadius : 0.45
+
+  - name: "yellowtang"
+    modelPath: "creatures/yellowtang/yellowtang.obj"
+    texturePath: "creatures/yellowtang/yellowtang.png"
+    numboids: 30
+    alignmentWeight: 0.1
+    cohesionWeight: 1.0
+    separationWeight: 2.0
+    leaderAttractionWeight: 2.0
+    maxSpeed: 2.0
+    maxAccel: 10.0
+    perceptionRadius : 0.5
+    separationRadius : 0.7
+    mass : 1.0
