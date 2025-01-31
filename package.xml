@@ -44,6 +44,7 @@
   <depend>std_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>stonefish_ros</depend>
+  <depend>octomap_ros</depend>
 
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>

@@ -47,6 +47,7 @@ list(APPEND CATKIN_SOURCES
     geometry_msgs
     rosbag
     stonefish_ros
+    octomap_ros
   )
 
 find_package(catkin REQUIRED COMPONENTS ${CATKIN_SOURCES} message_generation actionlib genmsg)
@@ -99,6 +100,8 @@ add_library(${PROJECT_NAME}
   src/Boids.cpp
   src/Boids2.cpp
   src/RRT.cpp
+  src/Octoscn.cpp
+  src/OctoCoral.cpp
 )
 
 # add_dependencies(stonefish_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})

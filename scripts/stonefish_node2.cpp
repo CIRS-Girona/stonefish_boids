@@ -15,6 +15,8 @@
 #include <stonefish_boids/RRT.hpp>
 #include <thread>
 
+#include <stonefish_boids/Octoscn.hpp>
+
 struct Flock
 {
     // Boids boids;
@@ -247,8 +249,11 @@ void MyManager::BuildScenario()
     sf::BodyPhysicsSettings phy;
     phy.mode = sf::BodyPhysicsMode::DISABLED;
     phy.collisions = true;
-    sf::Box *box = new sf::Box("Box", phy, sf::Vector3(0.1, 0.1, 0.1), sf::I4(), "Steel", "red");
+    sf::Box *box = new sf::Box("myBox", phy, sf::Vector3(1, 1, 1), sf::I4(), "Steel", "red");
     AddSolidEntity(box, sf::Transform(sf::Quaternion(0, angle, 0), sf::Vector3(2.5, 0, -1.72)));
+
+    Octoscn octo;
+    octo.genOctreeScn(this);
 
     MakeFishes();
 
@@ -319,7 +324,7 @@ int main(int argc, char **argv)
     // sf::ROSSimulationManager manager(rate, scenarioPath);
 
     MyManager *manager = new MyManager(rate, scenarioPath);
-    sf::GraphicalSimulationApp app("Stonefish Simulator", dataDirPath, s, h, manager);
+    sf::GraphicalSimulationApp app("Boids Simulator", dataDirPath, s, h, manager);
 
     app.Run();
 
