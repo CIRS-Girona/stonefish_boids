@@ -67,19 +67,19 @@ std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f 
     ss_->setStartAndGoalStates(start_stt, goal_stt);
     // ss_->print();
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     // attempt to solve the problem
     ob::PlannerStatus status = ss_->solve(10.0);
-    std::cout << status << "\n";
+    // std::cout << status << "\n";
 
     if (ss_->haveExactSolutionPath())
     {
-        std::cout << "Found solution:\n";
-        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+        // std::cout << "Found solution:\n";
+        // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        // std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
         og::PathGeometric pathres = ss_->getSolutionPath();
-        std::cout << pathres.getStateCount() << "\n";
+        // std::cout << pathres.getStateCount() << "\n";
         pathres.interpolate(pathres.getStateCount() * 5);
 
         // start
