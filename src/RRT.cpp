@@ -14,8 +14,8 @@ RRT::RRT(int seed)
 {
     ompl::msg::noOutputHandler();
     ompl::RNG::setSeed(seed);
-
-    std::cout << "Loading RRT planner\n\n";
+    std::cout << "\033[;34m\n";
+    std::cout << "Loading RRT planner\n";
     // create a state space
     navSpace_ = std::make_shared<ob::RealVectorStateSpace>(3);
     navSpace_->setName("Position");
@@ -33,12 +33,12 @@ RRT::RRT(int seed)
     navSpace_->setLongestValidSegmentFraction(0.03);
     // std::cout << navSpace_->getMaximumExtent() << "\n";
 
-    std::cout << "setting simple setup\n";
+    // std::cout << "setting simple setup\n";
     ss_ = std::make_shared<og::SimpleSetup>(navSpace_);
     auto si = ss_->getSpaceInformation();
-    std::cout << "setting validity checker setup\n";
+    // std::cout << "setting validity checker setup\n";
 
-    std::cout << "setting planner \n";
+    // std::cout << "setting planner \n";
     planner_ = (std::make_shared<og::RRT>(si));
     planner_->params().setParam("range", "0.5");
     planner_->params().setParam("intermediate_states", "1");
@@ -46,16 +46,18 @@ RRT::RRT(int seed)
     // planner_->getSpecs();
     ss_->setPlanner(planner_);
 
-    std::cout << "printing setup\n";
+    // std::cout << "printing setup\n";
     ss_->setup();
     // ss_->print();
-    std::cout << "done printing setup\n";
-    std::cout << "loaded RRT planner\n\n";
+    // std::cout << "done printing setup\n";
+    std::cout << "Loaded RRT planner\n";
+    std::cout << "\033[0m" << "\n";
 }
 
 std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f goal)
 {
-    std::cout << "actually planning\n";
+    std::cout << "\033[;34m\n";
+    std::cout << "Generating path\n";
     this->ss_->clear();
 
     ob::ScopedState<> start_stt(navSpace_);
@@ -67,11 +69,11 @@ std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f 
     goal_stt[0] = goal[0];
     goal_stt[1] = goal[1];
     goal_stt[2] = goal[2];
-    std::cout << "requesting solution to:\n\n";
+    // std::cout << "requesting solution to:\n\n";
     ss_->setStartAndGoalStates(start_stt, goal_stt);
     // ss_->print();
 
-    // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     // attempt to solve the problem
     ob::PlannerStatus status = ss_->solve(10.0);
     // std::cout << status << "\n";
@@ -79,8 +81,8 @@ std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f 
     if (ss_->haveExactSolutionPath())
     {
         // std::cout << "Found solution:\n";
-        // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        // std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
         og::PathGeometric pathres = ss_->getSolutionPath();
         // std::cout << pathres.getStateCount() << "\n";
@@ -103,9 +105,11 @@ std::vector<Eigen::Vector3f> RRT::doPlan(Eigen::Vector3f start, Eigen::Vector3f 
     }
     else
     {
-        std::cout << "Solution not found\n";
+        std::cout << "Path not found\n";
     }
-    std::cout << "done planning\n";
+    std::cout << "Path generated\n";
+
+    std::cout << "\033[0m" << "\n";
 
     return path_;
 }

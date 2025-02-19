@@ -15,7 +15,11 @@
 #include <stonefish_boids/RRT.hpp>
 #include <thread>
 
-#include <stonefish_boids/Octoscn.hpp>
+// #include <stonefish_boids/Octoscn.hpp>
+// #include <stonefish_boids/OctreeScn.hpp>
+
+Eigen::IOFormat CommaInitFmt(Eigen::StreamPrecision, Eigen::DontAlignCols,
+                             ", ", ", ", "", "", " << ", ";");
 
 struct Flock
 {
@@ -32,12 +36,7 @@ struct Flock
 class MyManager : public sf::ROSSimulationManager
 {
 private:
-    ros::ServiceClient client;
-    ros::ServiceServer service;
-
-    int numBoids = 20;
     std::vector<std::thread> threads;
-
     std::vector<std::shared_ptr<Flock>> flocks;
 
     sf::AnimatedEntity *anim;
@@ -174,11 +173,12 @@ void MyManager::MakeFishes()
     RRT rrt(seed);
     for (int b = 0; b < boids_cfg.size(); b++)
     {
-        std::cout << "found: " << boids_cfg[b]["name"] << "\n";
+        std::cout << "\033[;31mBoids params\n";
+        std::cout << "Found: " << boids_cfg[b]["name"] << "\n";
         // Flock flock;
         auto flock = std::make_shared<Flock>();
         flock->flockName = std::string(boids_cfg[b]["name"]);
-        numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
+        auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
         Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {2, 5}, seed));
         flock->boids = Boids2(numBoids, initPoint, seed);
@@ -206,9 +206,6 @@ void MyManager::MakeFishes()
         flocks.push_back(flock);
     }
 
-    // CreateLook("fishtex", sf::Color::Gray(1.f), 0.1f, 0.f, 0.f,
-    //            sf::GetDataPath() + "creatures/yellowtang/yellowtang.png");
-    // create control ptr for every boid
     int b = 0;
     for (auto flock : flocks)
     {
@@ -262,8 +259,8 @@ void MyManager::BuildScenario()
     sf::Box *box = new sf::Box("myBox", phy, sf::Vector3(1, 1, 1), sf::I4(), "Steel", "red");
     AddSolidEntity(box, sf::Transform(sf::Quaternion(0, angle, 0), sf::Vector3(2.5, 0, -1.72)));
 
-    Octoscn octo;
-    octo.genOctreeScn(this);
+    // OctreeScn octo;
+    // octo.genOctreeScn(this);
 
     MakeFishes();
 
