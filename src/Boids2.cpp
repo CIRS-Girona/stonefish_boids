@@ -106,8 +106,17 @@ Vector3f Boids2::limitAccel(const Vector3f &accel)
 // repulsion force near surface
 Vector3f Boids2::computeSurfaceRepulsion(const Boid2 &boid)
 {
-    float repulsion = 1 / (boid.position.z() + __FLT_EPSILON__);
-    return Vector3f(0, 0, repulsion);
+
+    if (boid.position.z() - 1.0 < 0.5)
+    {
+        // std::cout << "near surface limit, pushing down" << "\n";
+        float repulsion = 1 / (boid.position.z() + __FLT_EPSILON__);
+        return Vector3f(0, 0, repulsion);
+    }
+    else
+    {
+        return Vector3f::Zero();
+    }
 }
 
 void Boids2::updateBoids(double dt)
