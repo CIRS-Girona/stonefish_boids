@@ -180,8 +180,8 @@ void MyManager::MakeFishes()
         flock->flockName = std::string(boids_cfg[b]["name"]);
         auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
-        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {2, 5}, seed));
-        flock->boids = Boids2(numBoids, initPoint, seed);
+        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
+        flock->boids = Boids2(numBoids, initPoint, seed++);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock->boids.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -195,9 +195,9 @@ void MyManager::MakeFishes()
         flock->boids.printSettings();
         std::cout << "\033[0m" << "\n";
 
-        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed));
-        // std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
-        // std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
+        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed++));
+        std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
+        std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
         flock->leaderPath = rrt.doPlan(initPoint, endPoint);
         flock->leaderTraj = new sf::ManualTrajectory();
         anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), flock->leaderTraj);
