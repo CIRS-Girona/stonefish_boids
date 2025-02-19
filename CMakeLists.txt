@@ -107,8 +107,8 @@ add_library(${PROJECT_NAME}
 # add_dependencies(stonefish_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})
 target_link_libraries(stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
-# add_executable(viz_boids scripts/viz_boids.cpp)
-# target_link_libraries(viz_boids stonefish_boids)
+add_executable(viz_boids scripts/viz_boids.cpp)
+target_link_libraries(viz_boids stonefish_boids)
 
 add_executable(stonefish_node scripts/stonefish_node.cpp)
 target_link_libraries(stonefish_node stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
