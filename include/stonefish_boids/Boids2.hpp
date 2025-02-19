@@ -50,7 +50,7 @@ private:
 
 public:
     Boids2();
-    Boids2(int numBoids, const Vector3f &initialLeaderPosition);
+    Boids2(int numBoids, const Vector3f &initialLeaderPosition, int seed);
     void updateBoids(double dt);
 
     const std::vector<Boid2> &getBoids() const;

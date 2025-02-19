@@ -101,6 +101,7 @@ int main(int argc, char **argv)
     const double worldSize = 2.0;
     const double dt = 30.0;
     ros::Rate rate(dt);
+    int seed = 69;
     Boids2 flock;
     XmlRpc::XmlRpcValue boids_cfg;
     nh.getParam("boids_settings/", boids_cfg);
@@ -110,7 +111,7 @@ int main(int argc, char **argv)
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
         std::cout << boids_cfg[b]["name"] << "\n";
         int numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        flock = Boids2(numBoids, Vector3f(0, 0, 2));
+        flock = Boids2(numBoids, Vector3f(0, 0, 2), seed);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -125,7 +126,7 @@ int main(int argc, char **argv)
         break;
     }
 
-    RRT rrt;
+    RRT rrt(seed);
     auto leaderPath = rrt.doPlan(Eigen::Vector3f(0, 0, 5), Eigen::Vector3f(10, 0, 2));
 
     nav_msgs::Path pathmsg;

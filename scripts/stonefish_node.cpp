@@ -181,7 +181,7 @@ void MyManager::MakeFishes()
         flock->boids.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
         flock->boids.printSettings();
 
-        RRT rrt;
+        RRT rrt(69);
         Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}));
         std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
         std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";

@@ -1,3 +1,12 @@
+# rng seed
+boids_seed: 69
+
+# boids spawn bounding box
+# boids_world:
+#   - x_bounds: [-10,10]
+#     y_bounds: [-10,10]
+#     z_bounds: [1,7]  
+
 boids_settings:
   - name: "reddisc"
     modelPath: "creatures/reddisc/reddisc.obj"

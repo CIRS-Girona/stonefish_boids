@@ -6,12 +6,16 @@
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/geometric/planners/rrt/RRT.h>
 #include <ompl/base/ScopedState.h>
+#include <ompl/util/RandomNumbers.h>
 
 namespace ob = ompl::base;
 
-RRT::RRT()
+RRT::RRT(int seed)
 {
-    std::cout << "loading RRT planner\n\n";
+    ompl::msg::noOutputHandler();
+    ompl::RNG::setSeed(seed);
+
+    std::cout << "Loading RRT planner\n\n";
     // create a state space
     navSpace_ = std::make_shared<ob::RealVectorStateSpace>(3);
     navSpace_->setName("Position");

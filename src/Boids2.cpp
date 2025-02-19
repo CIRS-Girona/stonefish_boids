@@ -142,10 +142,10 @@ Boids2::Boids2()
     // std::cout << "default boids constructor" << "\n";
 }
 
-Boids2::Boids2(int numBoids, const Vector3f &initialLeaderPosition) : leaderPosition(initialLeaderPosition)
+Boids2::Boids2(int numBoids, const Vector3f &initialLeaderPosition, int seed) : leaderPosition(initialLeaderPosition)
 {
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(seed);
     std::uniform_real_distribution<double> dis(-2.0, 2.0);
 
     for (int i = 0; i < numBoids; i++)

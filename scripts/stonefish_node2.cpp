@@ -56,7 +56,8 @@ public:
     void UpdateGroup(std::shared_ptr<Flock> flock);
     Eigen::Vector3f randomVector3f(const std::vector<float> &xlim,
                                    const std::vector<float> &ylim,
-                                   const std::vector<float> &zlim);
+                                   const std::vector<float> &zlim,
+                                   int seed);
     void MakeFishes();
     void BuildScenario();
 };
@@ -141,11 +142,11 @@ void MyManager::timerCb(const ros::TimerEvent &evt)
 
 Eigen::Vector3f MyManager::randomVector3f(const std::vector<float> &xlim,
                                           const std::vector<float> &ylim,
-                                          const std::vector<float> &zlim)
+                                          const std::vector<float> &zlim,
+                                          int seed)
 {
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(seed);
     std::uniform_real_distribution<double> disx(xlim[0], xlim[1]);
     std::uniform_real_distribution<double> disy(ylim[0], ylim[1]);
     std::uniform_real_distribution<double> disz(zlim[0], zlim[1]);
@@ -155,13 +156,22 @@ Eigen::Vector3f MyManager::randomVector3f(const std::vector<float> &xlim,
 
 void MyManager::MakeFishes()
 {
-    Eigen::IOFormat CommaInitFmt(Eigen::StreamPrecision, Eigen::DontAlignCols,
-                                 ", ", ", ", "", "", " << ", ";");
+
+    XmlRpc::XmlRpcValue rseed;
+    bool gotten = nh.getParam("/boids_seed", rseed);
+    int seed = static_cast<int>(rseed);
+    std::cout << "\nRNG seed " << seed << "\n";
+
+    // XmlRpc::XmlRpcValue wordlimits;
+    // gotten = nh.getParam("/boids_world", wordlimits);
+    // std::cout << wordlimits[0]["x_bounds"][0] << "\n";
+    // float xmin = static_cast<flota>(wordlimits[0]["x_bounds"][0]);
+    // std::vector<float> xbounds = {xmin, 0};
 
     XmlRpc::XmlRpcValue boids_cfg;
-    bool gotten = nh.getParam("/boids_settings", boids_cfg);
-    std::cout << gotten << "\n";
+    gotten = nh.getParam("/boids_settings", boids_cfg);
     // int b = 0;
+    RRT rrt(seed);
     for (int b = 0; b < boids_cfg.size(); b++)
     {
         std::cout << "found: " << boids_cfg[b]["name"] << "\n";
@@ -170,8 +180,8 @@ void MyManager::MakeFishes()
         flock->flockName = std::string(boids_cfg[b]["name"]);
         numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
-        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {2, 5}));
-        flock->boids = Boids2(numBoids, initPoint);
+        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {2, 5}, seed));
+        flock->boids = Boids2(numBoids, initPoint, seed);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock->boids.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -183,11 +193,11 @@ void MyManager::MakeFishes()
         flock->boids.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
         flock->boids.setMass(static_cast<double>(boids_cfg[b]["mass"]));
         flock->boids.printSettings();
+        std::cout << "\033[0m" << "\n";
 
-        RRT rrt;
-        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}));
-        std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
-        std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
+        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed));
+        // std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
+        // std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
         flock->leaderPath = rrt.doPlan(initPoint, endPoint);
         flock->leaderTraj = new sf::ManualTrajectory();
         anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), flock->leaderTraj);

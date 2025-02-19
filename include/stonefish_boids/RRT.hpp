@@ -15,7 +15,7 @@ class RRT
 {
 private:
 public:
-    RRT();
+    RRT(int seed);
     // ~RRT();
 
     std::shared_ptr<ob::RealVectorStateSpace> navSpace_;
