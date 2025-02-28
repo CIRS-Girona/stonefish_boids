@@ -31,7 +31,21 @@
 		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 8.0"/>
 	</static>
 
-	<static name="Brain" type="model">
+	<static name="Monolith" type="model">
+		<physical>
+			<mesh filename="corals/monolith.obj" scale="1.0"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</physical>
+		<visual>
+			<mesh filename="corals/monolith.obj" scale="1.0"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</visual>
+		<material name="Rock"/>
+		<look name="Brain"/>
+		<world_transform xyz="0 0 0" rpy="0 0 0"/>
+	</static>
+
+	<!-- <static name="Brain" type="model">
 		<physical>
 			<mesh filename="corals/brain_phy.obj" scale="1.4112050416327635"/>
 			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -42,8 +56,8 @@
 		</visual>
 		<material name="Rock"/>
 		<look name="Brain"/>
-		<world_transform xyz="3 3 4" rpy="3.1416 0 0"/>
-	</static>
+		<world_transform xyz="0 0 4" rpy="3.1416 0 0"/>
+	</static> -->
 
 	<!-- <include file="$(find iauv_description)/scenarios/peixos.scn"/> -->
 
