@@ -96,6 +96,8 @@ void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
     flock->leaderPathIndex++;
 
     // flock->boids.setLeaderPosition(Vector3f(0, 0, 2));
+    // flock->boids.AddGroupExternalForce({0, 0, 10}, 1);
+    // fix this rate value to be more, uh, meaningfull, why is hardcoded
     flock->boids.updateBoids(1.0 / 30.0);
     auto leader_pos = flock->boids.getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
@@ -179,8 +181,8 @@ void MyManager::MakeFishes()
         auto flock = std::make_shared<Flock>();
         flock->flockName = std::string(boids_cfg[b]["name"]);
         auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        // flock->boids = std::make_unique<Boids>(numBoids, Vector3f(0, 0, 0));
-        Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
+        Eigen::Vector3f initPoint = {4, 0, 2};
+        // Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
         flock->boids = Boids2(numBoids, initPoint, seed++);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
@@ -195,7 +197,8 @@ void MyManager::MakeFishes()
         flock->boids.printSettings();
         std::cout << "\033[0m" << "\n";
 
-        Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed++));
+        // Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed++));
+        Eigen::Vector3f endPoint = {-4, 0, 2};
         std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
         std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
         flock->leaderPath = rrt.doPlan(initPoint, endPoint);
@@ -269,7 +272,7 @@ void MyManager::BuildScenario()
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "parsed_simulator", ros::init_options::NoSigintHandler);
+    ros::init(argc, argv, "stonefish_boids_node", ros::init_options::NoSigintHandler);
 
     // Check number of command line arguments
     if (argc < 7)

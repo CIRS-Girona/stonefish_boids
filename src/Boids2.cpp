@@ -119,6 +119,12 @@ Vector3f Boids2::computeSurfaceRepulsion(const Boid2 &boid)
     }
 }
 
+// Apply any external force
+void Boids2::AddGroupExternalForce(Vector3f force, double weight)
+{
+    groupExternalForce += force * weight;
+}
+
 void Boids2::updateBoids(double dt)
 {
     std::vector<Vector3f> newAccelerations;
@@ -129,10 +135,10 @@ void Boids2::updateBoids(double dt)
         Vector3f cohesion = computeCohesion(boid) * cohesionWeight;
         Vector3f separation = computeSeparation(boid) * separationWeight;
         Vector3f leaderAttraction = computeLeaderAttraction(boid) * leaderAttractionWeight;
-
+        // why times 2
         Vector3f surfaceRepulsion = computeSurfaceRepulsion(boid) * 2;
 
-        Vector3f newAccel = (alignment + cohesion + separation + leaderAttraction + surfaceRepulsion) / mass;
+        Vector3f newAccel = (alignment + cohesion + separation + leaderAttraction + surfaceRepulsion + groupExternalForce) / mass;
         newAccel = limitAccel(newAccel);
         newAccelerations.push_back(newAccel);
     }
@@ -144,6 +150,8 @@ void Boids2::updateBoids(double dt)
         boids[i].velocity = limitSpeed(boids[i].velocity);
         boids[i].position += boids[i].velocity * dt;
     }
+
+    groupExternalForce = Vector3f::Zero();
 }
 
 Boids2::Boids2()

@@ -26,6 +26,7 @@ private:
     double perceptionRadius = 0.0;
     double separationRadius = 0.0;
     double mass = 1.0;
+    Vector3f groupExternalForce = Vector3f::Zero();
 
     // Alignment: Match the velocity of nearby boids
     Vector3f computeAlignment(const Boid2 &boid);
@@ -71,4 +72,6 @@ public:
     void setPerceptionRadius(const double value);
     void setSeparationRadius(const double value);
     void setMass(const double value);
+
+    void AddGroupExternalForce(Vector3f force, double weight);
 };
