@@ -36,6 +36,11 @@ message("4 ${OMPL_LIBRARY_DIR}")
 message("5 ${OMPL_LIBRARIES}")
 message("OMPL version ${OMPL_VERSION}")
 
+find_package(PCL REQUIRED)
+message("PCL print")
+message("PCL found? ${PCL_FOUND}")
+message("PCL version ${PCL_VERSION}")
+
 list(APPEND CATKIN_SOURCES
     roscpp
     rospy
@@ -99,9 +104,11 @@ list(APPEND LIBRARIES
 add_library(${PROJECT_NAME}
   src/Boids.cpp
   src/Boids2.cpp
+  src/Boids3.cpp
   src/RRT.cpp
-  src/Octoscn.cpp
-  src/OctoCoral.cpp
+  # src/Octoscn.cpp
+  # src/OctoCoral.cpp
+  # src/OctreeScn.cpp
 )
 
 # add_dependencies(stonefish_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})
@@ -115,6 +122,9 @@ target_link_libraries(stonefish_node stonefish_boids ${catkin_LIBRARIES} ${LIBRA
 
 add_executable(stonefish_node2 scripts/stonefish_node2.cpp)
 target_link_libraries(stonefish_node2 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+
+add_executable(stonefish_node3 scripts/stonefish_node3.cpp)
+target_link_libraries(stonefish_node3 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
 # add_script(test scripts)
 
