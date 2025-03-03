@@ -71,7 +71,7 @@ MyManager::MyManager(sf::Scalar rate, std::string scenarioPath) : ROSSimulationM
     std::cout << scenarioPath << "\n";
 
     // leader_traj = new sf::ManualTrajectory();
-    timer = nh.createTimer(ros::Duration(1.0 / 30.0), &MyManager::timerCb, this);
+    timer = nh.createTimer(ros::Duration(1.0 / 30.0), &MyManager::timerCb, this, false, false);
 }
 
 MyManager::~MyManager()
@@ -305,6 +305,7 @@ void MyManager::BuildScenario()
     // octo.genOctreeScn(this);
 
     MakeFishes();
+    timer.start();
 
     spinner.start();
 }
