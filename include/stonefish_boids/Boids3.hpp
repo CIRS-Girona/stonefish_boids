@@ -15,7 +15,8 @@ public:
     Vector3f aceleration;
     Vector3f force;
 
-    Boid3(/* args */);
+    u_int id;
+    Boid3(u_int id);
     ~Boid3();
 
     void addExternalForce(const Vector3f extForce, const double weight);

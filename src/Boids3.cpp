@@ -7,7 +7,7 @@
 
 using Eigen::Vector3f;
 
-Boid3::Boid3(/* args */)
+Boid3::Boid3(u_int id) : id(id)
 {
 }
 
