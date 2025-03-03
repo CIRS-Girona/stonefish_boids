@@ -15,9 +15,9 @@ Boid3::~Boid3()
 {
 }
 
-void Boid3::addExternalForce(const Vector3f extForce)
+void Boid3::addExternalForce(const Vector3f extForce, const double weight)
 {
-    force += extForce;
+    force += (extForce * weight);
     std::cout << force << "\n";
 }
 
@@ -130,7 +130,7 @@ void Boids3::updateBoids(double dt)
         Vector3f leaderAttraction = computeLeaderAttraction(boid) * leaderAttractionWeight;
         Vector3f surfaceRepulsion = computeSurfaceRepulsion(boid) * 2; // why times 2
 
-        Vector3f newAccel = (rules + leaderAttraction + surfaceRepulsion + groupExternalForce) / mass;
+        Vector3f newAccel = (rules + leaderAttraction + surfaceRepulsion + groupExternalForce + boid.force) / mass;
         newAccel = limitAccel(newAccel);
         newAccelerations.push_back(newAccel);
     }
@@ -141,6 +141,7 @@ void Boids3::updateBoids(double dt)
         boids[i].velocity += boids[i].aceleration * dt;
         boids[i].velocity = limitSpeed(boids[i].velocity);
         boids[i].position += boids[i].velocity * dt;
+        boids[i].force = Vector3f::Zero(); // reset force, maybe in another loop
     }
 
     groupExternalForce = Vector3f::Zero();

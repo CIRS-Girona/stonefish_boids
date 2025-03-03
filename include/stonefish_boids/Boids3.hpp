@@ -18,7 +18,7 @@ public:
     Boid3(/* args */);
     ~Boid3();
 
-    void addExternalForce(const Vector3f extForce);
+    void addExternalForce(const Vector3f extForce, const double weight);
 };
 
 class Boids3
