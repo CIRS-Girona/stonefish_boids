@@ -5,11 +5,20 @@
 
 using Eigen::Vector3f;
 
-struct Boid3
+class Boid3
 {
+private:
+    /* data */
+public:
     Vector3f position;
     Vector3f velocity;
     Vector3f aceleration;
+    Vector3f force;
+
+    Boid3(/* args */);
+    ~Boid3();
+
+    void addExternalForce(const Vector3f extForce);
 };
 
 class Boids3

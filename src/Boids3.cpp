@@ -7,6 +7,20 @@
 
 using Eigen::Vector3f;
 
+Boid3::Boid3(/* args */)
+{
+}
+
+Boid3::~Boid3()
+{
+}
+
+void Boid3::addExternalForce(const Vector3f extForce)
+{
+    force += extForce;
+    std::cout << force << "\n";
+}
+
 // Alignment: Match the velocity of nearby boids
 // Cohesion: Steer towards the average position of nearby boids
 // Separation: Avoid crowding nearby boids
@@ -145,10 +159,9 @@ Boids3::Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed) : 
 
     for (int i = 0; i < numBoids; i++)
     {
-        boids.push_back({Vector3f(dis(gen) + leaderPosition[0],
-                                  dis(gen) + leaderPosition[1],
-                                  leaderPosition[2]),
-                         Vector3f(dis(gen) * 0.1f, dis(gen) * 0.1f, dis(gen) * 0.1f)});
+        Boid3 boid;
+        boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], leaderPosition[2]);
+        boids.push_back(boid);
     }
 }
 
