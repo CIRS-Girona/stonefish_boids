@@ -13,6 +13,7 @@
 
 #include <stonefish_boids/Boids3.hpp>
 #include <stonefish_boids/RRT.hpp>
+#include <stonefish_boids/Line.hpp>
 #include <thread>
 
 // #include <stonefish_boids/Octoscn.hpp>
@@ -172,7 +173,8 @@ void MyManager::MakeFishes()
     XmlRpc::XmlRpcValue boids_cfg;
     gotten = nh.getParam("/boids_settings", boids_cfg);
     // int b = 0;
-    RRT rrt(seed);
+    // RRT rrt(seed);
+    Line line;
     for (int b = 0; b < boids_cfg.size(); b++)
     {
         std::cout << "\033[;31mBoids params\n";
@@ -181,7 +183,7 @@ void MyManager::MakeFishes()
         auto flock = std::make_shared<Flock>();
         flock->flockName = std::string(boids_cfg[b]["name"]);
         auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        Eigen::Vector3f initPoint = {4, 0, 2};
+        Eigen::Vector3f initPoint = {10, 0, 2};
         // Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
         flock->boids = Boids3(numBoids, initPoint, seed++);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
@@ -198,10 +200,11 @@ void MyManager::MakeFishes()
         std::cout << "\033[0m" << "\n";
 
         // Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed++));
-        Eigen::Vector3f endPoint = {-4, 0, 2};
+        Eigen::Vector3f endPoint = {-10, 0, 2};
         std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
         std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
-        flock->leaderPath = rrt.doPlan(initPoint, endPoint);
+        // flock->leaderPath = rrt.doPlan(initPoint, endPoint);
+        flock->leaderPath = line.doPlan(initPoint, endPoint);
         flock->leaderTraj = new sf::ManualTrajectory();
         anim = new sf::AnimatedEntity("LeaderFrame" + std::to_string(b), flock->leaderTraj);
         AddAnimatedEntity(anim);
