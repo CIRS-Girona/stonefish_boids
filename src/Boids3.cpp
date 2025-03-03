@@ -114,7 +114,7 @@ Vector3f Boids3::computeSurfaceRepulsion(const Boid3 &boid)
     }
 }
 
-// Apply any external force
+// Apply any external force to the whole grupo
 void Boids3::AddGroupExternalForce(Vector3f force, double weight)
 {
     groupExternalForce += force * weight;
@@ -124,6 +124,7 @@ void Boids3::updateBoids(double dt)
 {
     std::vector<Vector3f> newAccelerations;
 
+    // compute rules at current iteration
     for (const auto &boid : boids)
     {
         Vector3f rules = computeRules(boid); // compute basic boid rules
@@ -135,6 +136,7 @@ void Boids3::updateBoids(double dt)
         newAccelerations.push_back(newAccel);
     }
 
+    // update boids for iteration+1
     for (size_t i = 0; i < boids.size(); i++)
     {
         boids[i].aceleration = newAccelerations[i];
@@ -158,7 +160,7 @@ Boids3::Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed) : 
     std::mt19937 gen(seed);
     std::uniform_real_distribution<double> dis(-1.0, 1.0);
 
-    for (int i = 0; i < numBoids; i++)
+    for (u_int i = 0; i < numBoids; i++)
     {
         Boid3 boid(i);
         boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], dis(gen) + leaderPosition[2]);

@@ -23,8 +23,6 @@ Eigen::IOFormat CommaInitFmt(Eigen::StreamPrecision, Eigen::DontAlignCols,
 
 struct Flock
 {
-    // Boids boids;
-    // std::shared_ptr<Boids> boids;
     std::string flockName;
     Boids3 boids;
     std::vector<sf::ManualTrajectory *> boidTrajs;
@@ -40,9 +38,6 @@ private:
     std::vector<std::shared_ptr<Flock>> flocks;
 
     sf::AnimatedEntity *anim;
-    // sf::ManualTrajectory *leader_traj;
-    // std::vector<sf::ManualTrajectory *> boid_paths;
-    // std::vector<Eigen::Vector3f> leaderPath;
 
     ros::Timer timer;
     void timerCb(const ros::TimerEvent &evt);
@@ -299,7 +294,7 @@ void MyManager::BuildScenario()
     phy.mode = sf::BodyPhysicsMode::DISABLED;
     phy.collisions = true;
     sf::Box *box = new sf::Box("myBox", phy, sf::Vector3(1, 1, 1), sf::I4(), "Steel", "red");
-    AddSolidEntity(box, sf::Transform(sf::Quaternion(0, angle, 0), sf::Vector3(2.5, 0, -1.72)));
+    AddSolidEntity(box, sf::Transform(sf::Quaternion(0, angle, 0), sf::Vector3(3.0, 3.0, 6.0)));
 
     // OctreeScn octo;
     // octo.genOctreeScn(this);
