@@ -106,9 +106,9 @@ add_library(${PROJECT_NAME}
   src/Boids2.cpp
   src/Boids3.cpp
   src/RRT.cpp
-  # src/Octoscn.cpp
-  # src/OctoCoral.cpp
-  # src/OctreeScn.cpp
+  src/Line.cpp
+  src/OcForceTree.cpp
+  src/CollisionEnv.cpp
 )
 
 # add_dependencies(stonefish_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})
