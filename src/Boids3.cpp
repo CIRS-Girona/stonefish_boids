@@ -156,12 +156,12 @@ Boids3::Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed) : 
 {
     std::random_device rd;
     std::mt19937 gen(seed);
-    std::uniform_real_distribution<double> dis(-2.0, 2.0);
+    std::uniform_real_distribution<double> dis(-1.0, 1.0);
 
     for (int i = 0; i < numBoids; i++)
     {
-        Boid3 boid;
-        boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], leaderPosition[2]);
+        Boid3 boid(i);
+        boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], dis(gen) + leaderPosition[2]);
         boids.push_back(boid);
     }
 }
