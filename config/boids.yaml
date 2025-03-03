@@ -8,19 +8,19 @@ boids_seed: 69
 #     z_bounds: [1,7]  
 
 boids_settings:
-  - name: "reddisc"
-    modelPath: "creatures/reddisc/reddisc.obj"
-    texturePath: "creatures/reddisc/reddisc.png"
-    numboids: 10
-    alignmentWeight: 0.1
-    cohesionWeight: 1.0
-    separationWeight: 2.0
-    leaderAttractionWeight: 2.0
-    maxSpeed: 2.0
-    maxAccel: 10.0
-    perceptionRadius : 0.5
-    separationRadius : 0.7
-    mass : 1.0
+  # - name: "reddisc"
+  #   modelPath: "creatures/reddisc/reddisc.obj"
+  #   texturePath: "creatures/reddisc/reddisc.png"
+  #   numboids: 1
+  #   alignmentWeight: 0.1
+  #   cohesionWeight: 1.0
+  #   separationWeight: 2.0
+  #   leaderAttractionWeight: 2.0
+  #   maxSpeed: 2.0
+  #   maxAccel: 10.0
+  #   perceptionRadius : 0.5
+  #   separationRadius : 0.7
+  #   mass : 1.0
 
   # - name: "bluefin"
   #   modelPath: "creatures/bluefish/bluefish.obj"
@@ -55,7 +55,7 @@ boids_settings:
     separationWeight: 2.0
     leaderAttractionWeight: 2.0
     maxSpeed: 2.0
-    maxAccel: 10.0
+    maxAccel: 5.0
     perceptionRadius : 0.5
     separationRadius : 0.7
     mass : 1.0
