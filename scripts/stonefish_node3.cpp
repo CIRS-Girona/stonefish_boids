@@ -16,8 +16,7 @@
 #include <stonefish_boids/Line.hpp>
 #include <thread>
 
-// #include <stonefish_boids/Octoscn.hpp>
-// #include <stonefish_boids/OctreeScn.hpp>
+#include <stonefish_boids/CollisionEnv.hpp>
 
 Eigen::IOFormat CommaInitFmt(Eigen::StreamPrecision, Eigen::DontAlignCols,
                              ", ", ", ", "", "", " << ", ";");
@@ -49,6 +48,8 @@ private:
     void timerCb(const ros::TimerEvent &evt);
     // float inc = 0;
 
+    const CollisionEnv cEnv;
+
 public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
     ~MyManager();
@@ -58,6 +59,7 @@ public:
                                    const std::vector<float> &ylim,
                                    const std::vector<float> &zlim,
                                    int seed);
+    void computeEnvForce(std::shared_ptr<Flock> flock);
     void MakeFishes();
     void BuildScenario();
 };
@@ -84,6 +86,39 @@ MyManager::~MyManager()
     }
 }
 
+// apply force based on octree
+void MyManager::computeEnvForce(std::shared_ptr<Flock> flock)
+{
+    for (auto &boid : flock->boids.getBoids())
+    {
+        // std::cout << boid.position << "\n";
+        auto query = octomap::point3d(boid.position[0], boid.position[1], boid.position[2]);
+        try
+        {
+            auto result = cEnv.collisionTree->search(query);
+            if (result != NULL)
+            {
+                // std::cout << ros::Time::now() << "\n";
+                if (cEnv.collisionTree->isNodeOccupied(result))
+                {
+
+                    std::cout << "occupied, boid id: " << boid.id << "--- " << ros::Time::now() << "\n";
+                    // std::cout << result->getForce() << "\n";
+                    boid.addExternalForce(result->getForce(), 6);
+                }
+            }
+            else
+            {
+                // std::cout << "it was null" << "\n";
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
+}
+
 void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
 {
     // std::cout << flock->flockName << "\n";
@@ -96,6 +131,7 @@ void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
     flock->boids.setLeaderPosition(flock->leaderPath.at(flock->leaderPathIndex));
     flock->leaderPathIndex++;
 
+    computeEnvForce(flock);
     // flock->boids.setLeaderPosition(Vector3f(0, 0, 2));
     // flock->boids.AddGroupExternalForce({0, 0, 10}, 1);
     // fix this rate value to be more, uh, meaningfull, why is hardcoded
