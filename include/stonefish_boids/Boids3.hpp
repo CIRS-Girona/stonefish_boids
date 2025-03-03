@@ -59,7 +59,8 @@ public:
     Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed);
     void updateBoids(double dt);
 
-    const std::vector<Boid3> &getBoids() const;
+    // const std::vector<Boid3> &getBoids() const;
+    std::vector<Boid3> &getBoids();
 
     void setLeaderPosition(const Vector3f &position);
     const Vector3f &getLeaderPosition() const;

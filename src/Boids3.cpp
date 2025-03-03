@@ -165,7 +165,7 @@ Boids3::Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed) : 
     }
 }
 
-const std::vector<Boid3> &Boids3::getBoids() const
+std::vector<Boid3> &Boids3::getBoids()
 {
     return boids;
 }
