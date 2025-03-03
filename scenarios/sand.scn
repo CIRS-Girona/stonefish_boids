@@ -31,7 +31,7 @@
 		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 8.0"/>
 	</static>
 
-	<static name="Monolith" type="model">
+	<!-- <static name="Monolith" type="model">
 		<physical>
 			<mesh filename="corals/monolith.obj" scale="1.0"/>
 			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -43,6 +43,13 @@
 		<material name="Rock"/>
 		<look name="Brain"/>
 		<world_transform xyz="0 0 0" rpy="0 0 0"/>
+	</static> -->
+
+	<static name="Ball" type="sphere">
+		<dimensions radius="1"/>
+		<material name="Rock"/>
+		<look name="Brain"/>
+		<world_transform xyz="0.0 0.0 2.0" rpy="0.0 0.0 0.0"/>
 	</static>
 
 	<!-- <static name="Brain" type="model">
