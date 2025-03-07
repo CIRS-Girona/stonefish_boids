@@ -23,12 +23,13 @@
 	<looks>
 		<look name="seabed" rgb="0.7 0.7 0.5" roughness="0.9" normal_map="textures/sand_normal.png"/>
 		<look name="Brain" texture="corals/brain.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+		<look name="green" roughness="0.5" rgb="0.5 0.1 0.0"/>
 	</looks>
 
 	<static name="Seabed" type="plane">
 		<material name="Rock"/>
 		<look name="seabed" uv_scale="5.0"/>
-		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 8.0"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 5.0"/>
 	</static>
 
 	<!-- <static name="Monolith" type="model">
@@ -46,10 +47,24 @@
 	</static> -->
 
 	<static name="Ball" type="sphere">
-		<dimensions radius="1"/>
+		<dimensions radius="2.5"/>
 		<material name="Rock"/>
-		<look name="Brain"/>
-		<world_transform xyz="0.0 0.0 2.0" rpy="0.0 0.0 0.0"/>
+		<look name="green"/>
+		<world_transform xyz="0 -2 5" rpy="0 0 0"/>
+	</static>
+
+	<static name="Ball2" type="sphere">
+		<dimensions radius="2.5"/>
+		<material name="Rock"/>
+		<look name="green"/>
+		<world_transform xyz="4 2 5" rpy="0 0 0"/>
+	</static>
+
+	<static name="Ball3" type="sphere">
+		<dimensions radius="2.5"/>
+		<material name="Rock"/>
+		<look name="green"/>
+		<world_transform xyz="-4 2 5" rpy="0 0 0"/>
 	</static>
 
 	<!-- <static name="Brain" type="model">
@@ -63,8 +78,37 @@
 		</visual>
 		<material name="Rock"/>
 		<look name="Brain"/>
-		<world_transform xyz="0 0 4" rpy="3.1416 0 0"/>
+		<world_transform xyz="0 0 5" rpy="3.1416 0 0"/>
+	</static>
+
+	<static name="Brain2" type="model">
+		<physical>
+			<mesh filename="corals/brain_phy.obj" scale="1.4112050416327635"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</physical>
+		<visual>
+			<mesh filename="corals/brain.obj" scale="1.4112050416327635"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</visual>
+		<material name="Rock"/>
+		<look name="Brain"/>
+		<world_transform xyz="4 4 5" rpy="3.1416 0 0"/>
+	</static>
+
+	<static name="Brain3" type="model">
+		<physical>
+			<mesh filename="corals/brain_phy.obj" scale="1.4112050416327635"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</physical>
+		<visual>
+			<mesh filename="corals/brain.obj" scale="1.4112050416327635"/>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+		</visual>
+		<material name="Rock"/>
+		<look name="Brain"/>
+		<world_transform xyz="-4 4 5" rpy="3.1416 0 0"/>
 	</static> -->
+
 
 	<!-- <include file="$(find iauv_description)/scenarios/peixos.scn"/> -->
 
