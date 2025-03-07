@@ -18,7 +18,7 @@ Boid3::~Boid3()
 void Boid3::addExternalForce(const Vector3f extForce, const double weight)
 {
     force += (extForce * weight);
-    std::cout << force << "\n";
+    // std::cout << force << "\n";
 }
 
 // Alignment: Match the velocity of nearby boids

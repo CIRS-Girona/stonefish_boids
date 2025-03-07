@@ -43,7 +43,7 @@ private:
     void timerCb(const ros::TimerEvent &evt);
     // float inc = 0;
 
-    const CollisionEnv cEnv;
+    CollisionEnv cEnv;
 
 public:
     MyManager(sf::Scalar rate, std::string scenarioPath);
@@ -97,6 +97,7 @@ void MyManager::computeEnvForce(std::shared_ptr<Flock> flock)
     for (auto &boid : flock->boids.getBoids())
     {
         // std::cout << boid.position << "\n";
+        // envoroment collision check
         auto query = octomap::point3d(boid.position[0], boid.position[1], boid.position[2]);
         try
         {
@@ -106,10 +107,9 @@ void MyManager::computeEnvForce(std::shared_ptr<Flock> flock)
                 // std::cout << ros::Time::now() << "\n";
                 if (cEnv.collisionTree->isNodeOccupied(result))
                 {
-
-                    std::cout << "occupied, boid id: " << boid.id << "--- " << ros::Time::now() << "\n";
+                    // std::cout << "occupied, boid id: " << boid.id << "--- " << ros::Time::now() << "\n";
                     // std::cout << result->getForce() << "\n";
-                    boid.addExternalForce(result->getForce(), 6);
+                    boid.addExternalForce(result->getForce(), 10);
                 }
             }
             else
@@ -233,7 +233,7 @@ void MyManager::MakeFishes()
         auto flock = std::make_shared<Flock>();
         flock->flockName = std::string(boids_cfg[b]["name"]);
         auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
-        Eigen::Vector3f initPoint = {10, 0, 2};
+        Eigen::Vector3f initPoint = {10, 0, 3};
         // Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
         flock->boids = Boids3(numBoids, initPoint, seed++);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
@@ -250,7 +250,7 @@ void MyManager::MakeFishes()
         std::cout << "\033[0m" << "\n";
 
         // Eigen::Vector3f endPoint = (randomVector3f({-10, 10}, {-10, 10}, {2, 7}, seed++));
-        Eigen::Vector3f endPoint = {-10, 0, 2};
+        Eigen::Vector3f endPoint = {-10, 0, 3};
         std::cout << "initPoint" << initPoint.format(CommaInitFmt) << "\n";
         std::cout << "endPoint" << endPoint.format(CommaInitFmt) << "\n";
         // flock->leaderPath = rrt.doPlan(initPoint, endPoint);
