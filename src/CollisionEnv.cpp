@@ -4,38 +4,45 @@ CollisionEnv::CollisionEnv()
 {
     std::cout << "default collision env constructor" << "\n";
 
-    double resolution = 0.1;
-    collisionTree = std::make_shared<OcForceTree>(resolution);
+    resolution_ = 0.2;
+    collisionTree = std::make_shared<OcForceTree>(resolution_);
+}
 
-    // sphere
-    octomap::point3d center(0.0, 0.0, 2.0);
-    double radius = 2.5;
-    // double r2 = radius * radius;
-    double r1 = 0;
-    for (double x = center.x() - radius; x <= center.x() + radius; x += resolution / 2)
+CollisionEnv::~CollisionEnv()
+{
+    std::cout << "default collision env desconstructor" << "\n";
+}
+
+void CollisionEnv::addCollisionSphere(const Eigen::Vector3f &center, double radius)
+{
+
+    // Step sizes for θ (azimuth) and φ (elevation)
+    double dTheta = M_PI / 70.0; // fraction of PI increments
+    double dPhi = M_PI / 70.0;   // fraction of PI increments
+    double dR = resolution_ / 2; // Step along the radius
+
+    // Iterate in spherical coordinates
+    for (double r = 0; r <= radius; r += dR)
     {
-        for (double y = center.y() - radius; y <= center.y() + radius; y += resolution / 2)
+        for (double theta = 0; theta < 2 * M_PI; theta += dTheta)
         {
-            for (double z = center.z() - radius; z <= center.z() + radius; z += resolution / 2)
+            for (double phi = -M_PI / 2; phi <= 0; phi += dPhi)
             {
-                // Check if the point is inside the sphere
-                double check_r = (x - center.x()) * (x - center.x()) +
-                                 (y - center.y()) * (y - center.y()) +
-                                 (z - center.z()) * (z - center.z());
-                check_r = sqrt(check_r);
-                if (r1 < check_r && check_r <= radius)
-                {
-                    Eigen::Vector3f normal((x - center.x()), (y - center.y()), (z - center.z()));
-                    normal.stableNormalize();
-                    auto node = collisionTree->updateNode(octomap::point3d(x, y, z), true, true); // Mark occupied
-                    node->setForce(normal * ((1 / check_r) + __FLT_EPSILON__));
-                }
+                // Convert spherical coordinates to Cartesian
+                double x = center.x() + r * cos(phi) * cos(theta);
+                double y = center.y() + r * cos(phi) * sin(theta);
+                double z = center.z() + r * sin(phi);
+
+                Eigen::Vector3f normal((x - center.x()), (y - center.y()), (z - center.z()));
+                normal.stableNormalize();
+                auto node = collisionTree->updateNode(octomap::point3d(x, y, z), true, true); // Mark occupied
+                node->setForce(normal * ((1 / r) + __FLT_EPSILON__));
+                // node->setForce(normal * (r));
             }
         }
     }
-
     collisionTree->updateInnerOccupancy(); // Ensure consistency in octree
-    // auto suc = collisionTree->writeBinaryConst("/home/srealper/ros_ws/doc_ws/forcemap.bt");
+    // collisionTree->prune();
 }
 
 bool CollisionEnv::writeMaptoFile(std::string filepath)
@@ -44,3 +51,6 @@ bool CollisionEnv::writeMaptoFile(std::string filepath)
     std::cout << "\n";
     return suc;
 }
+
+// write map to file
+// auto suc = collisionTree->writeBinaryConst("/home/srealper/ros_ws/doc_ws/forcemap.bt");
