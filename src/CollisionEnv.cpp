@@ -38,7 +38,9 @@ CollisionEnv::CollisionEnv()
     // auto suc = collisionTree->writeBinaryConst("/home/srealper/ros_ws/doc_ws/forcemap.bt");
 }
 
-CollisionEnv::~CollisionEnv()
+bool CollisionEnv::writeMaptoFile(std::string filepath)
 {
-    std::cout << "default collision env desconstructor" << "\n";
+    bool suc = collisionTree->writeBinaryConst(filepath);
+    std::cout << "\n";
+    return suc;
 }
