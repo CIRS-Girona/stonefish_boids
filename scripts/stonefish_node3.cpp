@@ -121,6 +121,15 @@ void MyManager::computeEnvForce(std::shared_ptr<Flock> flock)
         {
             std::cerr << e.what() << '\n';
         }
+
+        // seafloor collision check
+
+        if (boid.position.z() > 4.5)
+        {
+            // std::cout << "near surface limit, pushing up" << "\n";
+            float repulsion = -1 / (abs(4.9 - boid.position.z()) + __FLT_EPSILON__);
+            boid.addExternalForce({0, 0, repulsion}, 1);
+        }
     }
 }
 
