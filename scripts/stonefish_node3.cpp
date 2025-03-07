@@ -65,6 +65,16 @@ MyManager::MyManager(sf::Scalar rate, std::string scenarioPath) : ROSSimulationM
     std::cout << rate << "\n";
     std::cout << scenarioPath << "\n";
 
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    // cEnv.addCollisionSphere({0.0, 0.0, 2.0}, 2.5);
+    cEnv.addCollisionSphere({0.0, -2.0, 5.0}, 3.5);
+    cEnv.addCollisionSphere({4.0, 2.0, 5.0}, 3.5);
+    cEnv.addCollisionSphere({-4.0, 2.0, 5.0}, 3.5);
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Building cEnv took = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    cEnv.writeMaptoFile("/home/srealper/ros_ws/doc_ws/forcemap.bt");
+
     // leader_traj = new sf::ManualTrajectory();
     timer = nh.createTimer(ros::Duration(1.0 / 30.0), &MyManager::timerCb, this, false, false);
 }
