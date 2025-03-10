@@ -146,40 +146,31 @@ void Boids3::AddGroupExternalForce(Vector3f force, double weight)
 
 void Boids3::updateBoids(double dt)
 {
-    std::vector<Vector3f> newAccelerations;
-
     // compute rules at current iteration
-    for (const auto &boid : boids)
+    for (auto &boid : boids)
     {
         Vector3f rules = computeRules(boid); // compute basic boid rules
         Vector3f leaderAttraction = computeLeaderAttraction(boid) * leaderAttractionWeight;
         Vector3f surfaceRepulsion = computeSurfaceRepulsion(boid) * 2; // why times 2
 
-        Vector3f newAccel = (rules + leaderAttraction + surfaceRepulsion + groupExternalForce + boid.force) / mass;
-        newAccel = limitAccel(newAccel);
-        newAccelerations.push_back(newAccel);
+        boid.aceleration = (rules + leaderAttraction + surfaceRepulsion + groupExternalForce + boid.force) / mass;
+        boid.aceleration = limitAccel(boid.aceleration);
     }
 
     // update boids for iteration+1
     spatial_grid.clear();
-    for (auto &&i : container)
+    for (auto &boid : boids)
     {
-        boid.id
-    }
+        boid.velocity += boid.aceleration * dt;
+        boid.velocity = limitSpeed(boid.velocity);
+        boid.position += boid.velocity * dt;
+        boid.force = Vector3f::Zero(); // Reset force
 
-    for (size_t i = 0; i < boids.size(); i++)
-    {
-        boids[i].aceleration = newAccelerations[i];
-        boids[i].velocity += boids[i].aceleration * dt;
-        boids[i].velocity = limitSpeed(boids[i].velocity);
-        boids[i].position += boids[i].velocity * dt;
-        boids[i].force = Vector3f::Zero(); // reset force, maybe in another loop
-
-        // update gridmap based on new position
-        int cell_x = floor(boids[i].position.x() / (cell_size));
-        int cell_y = floor(boids[i].position.y() / (cell_size));
-        int cell_z = floor(boids[i].position.z() / (cell_size));
-        spatial_grid[hash(cell_x, cell_y, cell_z)].push_back(i);
+        // Update spatial grid
+        int cell_x = floor(boid.position.x() / cell_size);
+        int cell_y = floor(boid.position.y() / cell_size);
+        int cell_z = floor(boid.position.z() / cell_size);
+        spatial_grid[hash(cell_x, cell_y, cell_z)].push_back(boid.id);
     }
 
     groupExternalForce = Vector3f::Zero();

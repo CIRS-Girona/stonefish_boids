@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <random>
-#include <Eigen/Dense>
+#include <Eigen/Core>
 
 using Eigen::Vector3f;
 
