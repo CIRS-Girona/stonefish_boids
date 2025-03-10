@@ -154,7 +154,8 @@ Boids3::Boids3()
     // std::cout << "default boids constructor" << "\n";
 }
 
-Boids3::Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed) : leaderPosition(initialLeaderPosition)
+Boids3::Boids3(std::string name, int numBoids, const Vector3f &initialLeaderPosition, int seed)
+    : name(name), leaderPosition(initialLeaderPosition)
 {
     std::random_device rd;
     std::mt19937 gen(seed);

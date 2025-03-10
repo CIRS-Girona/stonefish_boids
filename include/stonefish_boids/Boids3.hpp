@@ -26,6 +26,7 @@ class Boids3
 {
 private:
     std::vector<Boid3> boids;
+    std::string name;
     Vector3f leaderPosition;
     double alignmentWeight = 0.0;
     double cohesionWeight = 0.0;
@@ -57,7 +58,7 @@ private:
 
 public:
     Boids3();
-    Boids3(int numBoids, const Vector3f &initialLeaderPosition, int seed);
+    Boids3(std::string name, int numBoids, const Vector3f &initialLeaderPosition, int seed);
     void updateBoids(double dt);
 
     // const std::vector<Boid3> &getBoids() const;
