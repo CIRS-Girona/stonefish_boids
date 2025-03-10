@@ -4,7 +4,6 @@
 #include <vector>
 #include <random>
 #include <Eigen/Core>
-#include <chrono>
 
 using Eigen::Vector3f;
 
@@ -38,7 +37,6 @@ Vector3f Boids3::computeRules(const Boid3 &boid)
     int cx = floor(boid.position.x() / cell_size);
     int cy = floor(boid.position.y() / cell_size);
     int cz = floor(boid.position.z() / cell_size);
-    // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     for (int dx = -1; dx <= 1; dx++)
     {
         for (int dy = -1; dy <= 1; dy++)
@@ -72,8 +70,6 @@ Vector3f Boids3::computeRules(const Boid3 &boid)
         }
     }
 
-    // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    // std::cout << "iteration took = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[us]" << std::endl;
     // std::cout << name << ": boid " << boid.id << " number of neighbors: " << count << "\n";
     if (count > 0)
     {

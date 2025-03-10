@@ -147,9 +147,11 @@ void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
 
     computeEnvForce(flock);
     // flock->boids.setLeaderPosition(Vector3f(0, 0, 2));
-    // flock->boids.AddGroupExternalForce({0, 0, 10}, 1);
+    // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     // fix this rate value to be more, uh, meaningfull, why is hardcoded
     flock->boids.updateBoids(1.0 / 30.0);
+    // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    // std::cout << flock->flockName << " :boids update took = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
     auto leader_pos = flock->boids.getLeaderPosition();
     sf::Vector3 point(leader_pos.x(), leader_pos.y(), leader_pos.z());
     sf::Quaternion ori(0, 0, 0, 1);
