@@ -200,7 +200,9 @@ Boids3::Boids3(std::string name, int numBoids, const Vector3f &initialLeaderPosi
     for (u_int i = 0; i < numBoids; i++)
     {
         Boid3 boid(i);
-        boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], dis(gen) + leaderPosition[2]);
+        boid.position = Vector3f(dis(gen) + leaderPosition[0],
+                                 dis(gen) + leaderPosition[1],
+                                 dis(gen) + leaderPosition[2]);
         boids.push_back(boid);
 
         int cell_x = floor(boid.position.x() / (cell_size));
