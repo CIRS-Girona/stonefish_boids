@@ -27,6 +27,8 @@ class Boids3
 private:
     std::vector<Boid3> boids;
     std::string name;
+    std::unordered_map<int, std::vector<u_int>> spatial_grid;
+    double cell_size = 0.3;
     Vector3f leaderPosition;
     double alignmentWeight = 0.0;
     double cohesionWeight = 0.0;
@@ -56,6 +58,8 @@ private:
     // Limit the acceleration
     Vector3f limitAccel(const Vector3f &accel);
 
+    int hash(int x, int y, int z);
+
 public:
     Boids3();
     Boids3(std::string name, int numBoids, const Vector3f &initialLeaderPosition, int seed);
@@ -79,6 +83,7 @@ public:
     void setMaxAccel(const double value);
     void setPerceptionRadius(const double value);
     void setSeparationRadius(const double value);
+    void setNeighborCellSize(const double value);
     void setMass(const double value);
 
     void AddGroupExternalForce(Vector3f force, double weight);

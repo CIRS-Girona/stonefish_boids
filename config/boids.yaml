@@ -20,6 +20,7 @@ boids_settings:
     maxAccel: 10.0
     perceptionRadius : 0.5
     separationRadius : 0.7
+    neighborCellsize: 0.3
     mass : 1.0
 
   # - name: "bluefin"
@@ -58,4 +59,5 @@ boids_settings:
     maxAccel: 5.0
     perceptionRadius : 0.5
     separationRadius : 0.7
+    neighborCellsize: 0.3
     mass : 1.0

@@ -4,6 +4,7 @@
 #include <vector>
 #include <random>
 #include <Eigen/Core>
+#include <chrono>
 
 using Eigen::Vector3f;
 
@@ -33,24 +34,47 @@ Vector3f Boids3::computeRules(const Boid3 &boid)
     // repulsion vars
     Vector3f repulsion = Vector3f::Zero();
     int count = 0;
-    for (const auto &other : boids)
+
+    int cx = floor(boid.position.x() / cell_size);
+    int cy = floor(boid.position.y() / cell_size);
+    int cz = floor(boid.position.z() / cell_size);
+    // std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    for (int dx = -1; dx <= 1; dx++)
     {
-        double distance = (boid.position - other.position).norm();
-        if (distance < perceptionRadius && &boid != &other)
+        for (int dy = -1; dy <= 1; dy++)
         {
-            // aligment rule
-            avgVelocity += other.velocity;
-            // cohesion rule
-            avgPosition += other.position;
-            count++;
-        }
-        // separation rule
-        if (distance < separationRadius && &boid != &other)
-        {
-            repulsion -= (other.position - boid.position) / distance;
+            for (int dz = -1; dz <= 1; dz++)
+            {
+                int h = hash(cx + dx, cy + dy, cz + dz);
+                // make sure the hash is real
+                if (spatial_grid.find(h) != spatial_grid.end())
+                {
+                    // all boid ids in this hash
+                    for (u_int &other_id : spatial_grid[h])
+                    {
+                        double distance = (boid.position - boids[other_id].position).norm();
+                        if (distance < perceptionRadius && &boid != &boids[other_id])
+                        {
+                            // aligment rule
+                            avgVelocity += boids[other_id].velocity;
+                            // cohesion rule
+                            avgPosition += boids[other_id].position;
+                            count++;
+                        }
+                        // separation rule
+                        if (distance < separationRadius && &boid != &boids[other_id])
+                        {
+                            repulsion -= (boids[other_id].position - boid.position) / distance;
+                        }
+                    }
+                }
+            }
         }
     }
 
+    // std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    // std::cout << "iteration took = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[us]" << std::endl;
+    // std::cout << name << ": boid " << boid.id << " number of neighbors: " << count << "\n";
     if (count > 0)
     {
         // aligment + cohesion + separation
@@ -137,6 +161,12 @@ void Boids3::updateBoids(double dt)
     }
 
     // update boids for iteration+1
+    spatial_grid.clear();
+    for (auto &&i : container)
+    {
+        boid.id
+    }
+
     for (size_t i = 0; i < boids.size(); i++)
     {
         boids[i].aceleration = newAccelerations[i];
@@ -144,6 +174,12 @@ void Boids3::updateBoids(double dt)
         boids[i].velocity = limitSpeed(boids[i].velocity);
         boids[i].position += boids[i].velocity * dt;
         boids[i].force = Vector3f::Zero(); // reset force, maybe in another loop
+
+        // update gridmap based on new position
+        int cell_x = floor(boids[i].position.x() / (cell_size));
+        int cell_y = floor(boids[i].position.y() / (cell_size));
+        int cell_z = floor(boids[i].position.z() / (cell_size));
+        spatial_grid[hash(cell_x, cell_y, cell_z)].push_back(i);
     }
 
     groupExternalForce = Vector3f::Zero();
@@ -166,7 +202,17 @@ Boids3::Boids3(std::string name, int numBoids, const Vector3f &initialLeaderPosi
         Boid3 boid(i);
         boid.position = Vector3f(dis(gen) + leaderPosition[0], dis(gen) + leaderPosition[1], dis(gen) + leaderPosition[2]);
         boids.push_back(boid);
+
+        int cell_x = floor(boid.position.x() / (cell_size));
+        int cell_y = floor(boid.position.y() / (cell_size));
+        int cell_z = floor(boid.position.z() / (cell_size));
+        spatial_grid[hash(cell_x, cell_y, cell_z)].push_back(i);
     }
+}
+
+int Boids3::hash(int x, int y, int z)
+{
+    return (x * 73856093) ^ (y * 19349663) ^ (z * 83492791);
 }
 
 std::vector<Boid3> &Boids3::getBoids()
@@ -184,6 +230,7 @@ void Boids3::printSettings()
               << "maxAccel: " << maxAccel << "\n"
               << "perceptionRadius: " << perceptionRadius << "\n"
               << "separationRadius: " << separationRadius << "\n"
+              << "neighbor_cellsize: " << cell_size << "\n"
               << "mass: " << mass << "\n";
 }
 
@@ -240,6 +287,11 @@ void Boids3::setPerceptionRadius(const double radius)
 void Boids3::setSeparationRadius(const double radius)
 {
     separationRadius = radius;
+}
+
+void Boids3::setNeighborCellSize(const double value)
+{
+    cell_size = value;
 }
 
 void Boids3::setMass(const double value)

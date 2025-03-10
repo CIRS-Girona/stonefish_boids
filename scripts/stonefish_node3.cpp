@@ -235,7 +235,7 @@ void MyManager::MakeFishes()
         auto numBoids = static_cast<int>(boids_cfg[b]["numboids"]);
         Eigen::Vector3f initPoint = {10, 0, 3};
         // Eigen::Vector3f initPoint = (randomVector3f({-5, 5}, {-5, 5}, {0.5, 5}, seed++));
-        flock->boids = Boids3(numBoids, initPoint, seed++);
+        flock->boids = Boids3(flock->flockName, numBoids, initPoint, seed++);
         std::cout << static_cast<double>(boids_cfg[b]["alignmentWeight"]) << "\n";
         flock->boids.setAlignmentWeight(static_cast<double>(boids_cfg[b]["alignmentWeight"]));
         flock->boids.setCohesionWeight(static_cast<double>(boids_cfg[b]["cohesionWeight"]));
@@ -245,6 +245,7 @@ void MyManager::MakeFishes()
         flock->boids.setMaxAccel(static_cast<double>(boids_cfg[b]["maxAccel"]));
         flock->boids.setPerceptionRadius(static_cast<double>(boids_cfg[b]["perceptionRadius"]));
         flock->boids.setSeparationRadius(static_cast<double>(boids_cfg[b]["separationRadius"]));
+        flock->boids.setNeighborCellSize(static_cast<double>(boids_cfg[b]["neighborCellsize"]));
         flock->boids.setMass(static_cast<double>(boids_cfg[b]["mass"]));
         flock->boids.printSettings();
         std::cout << "\033[0m" << "\n";
