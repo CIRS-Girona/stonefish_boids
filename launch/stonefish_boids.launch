@@ -8,8 +8,9 @@
 
     <rosparam command="load" file="$(find stonefish_boids)/config/boids.yaml"/>
 
+
     <!-- Simulation parameters -->
-    <arg name="simulation_data" value="$(find stonefish_boids)/resources"/>
+    <arg name="simulation_data" value="$(find coral_paywall)/resources"/>
     <arg name="scenario_description"
         value="$(find stonefish_boids)/scenarios/sand.scn"/>
     <arg name="simulation_rate" value="30.0"/>
@@ -17,7 +18,7 @@
     <arg name="graphics_quality" value="low"/>
 
     <!-- Run Simulator -->
-    <node name="stonefish_simulator" pkg="stonefish_boids" type="stonefish_node3"
+    <node name="stonefish_simulator" pkg="stonefish_boids" type="stonefish_node4"
         args="$(arg simulation_data) $(arg scenario_description)
                   $(arg simulation_rate) $(arg graphics_resolution) 
                   $(arg graphics_quality)"

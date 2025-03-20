@@ -1,0 +1,842 @@
+<?xml version="1.0"?>
+<scenario>
+    <!-- Environmental properties -->
+    <environment>
+        <ned latitude="41.7777" longitude="3.0333"/>
+        <ocean>
+            <water density="1000.0" jerlov="0.15"/>
+            <waves height="0.0"/>
+        </ocean>
+        <atmosphere>
+            <sun azimuth="-108.0" elevation="50.0"/>
+        </atmosphere>
+    </environment>
+    <!-- Material interactions -->
+    <materials>
+        <material name="Neutral" density="1000.0" restitution="0.2"/>
+        <material name="Fiberglass" density="1500.0" restitution="0.3"/>
+        <material name="Rock" density="3000.0" restitution="0.8"/>
+        <friction_table>
+            <friction material1="Neutral" material2="Neutral" static="0.5" dynamic="0.2"/>
+            <friction material1="Neutral" material2="Fiberglass" static="0.5" dynamic="0.2"/>
+            <friction material1="Neutral" material2="Rock" static="0.2" dynamic="0.1"/>
+            <friction material1="Fiberglass" material2="Fiberglass" static="0.5" dynamic="0.2"/>
+            <friction material1="Fiberglass" material2="Rock" static="0.6" dynamic="0.4"/>
+            <friction material1="Rock" material2="Rock" static="0.9" dynamic="0.7"/>
+        </friction_table>
+    </materials>
+
+    <looks>
+        <look name="Seabed" texture="scenes/ground/seabed.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Antlers" texture="scenes/corals/antlers.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Brain" texture="scenes/corals/brain.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Cabbage" texture="scenes/corals/cabbage.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Dome" texture="scenes/corals/dome.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan1" texture="scenes/corals/fan1.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan2" texture="scenes/corals/fan2.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan3" texture="scenes/corals/fan3.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan4" texture="scenes/corals/fan4.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan5" texture="scenes/corals/fan5.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Fan6" texture="scenes/corals/fan6.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Flower" texture="scenes/corals/flower.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Horns1" texture="scenes/corals/horns1.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Horns2" texture="scenes/corals/horns2.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Pillars" texture="scenes/corals/pillars.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Tubes1" texture="scenes/corals/tubes1.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Tubes2" texture="scenes/corals/tubes2.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+        <look name="Whip" texture="scenes/corals/whip.png" roughness="0.5" rgb="0.5 0.5 0.5"/>
+    </looks>
+    <static name="Seabed" type="model">
+        <physical>
+            <mesh filename="scenes/ground/seabed.obj" scale="1.0"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/ground/seabed.obj" scale="1.0"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Seabed"/>
+        <world_transform xyz="0.0 0.0 15.0" rpy="3.141592653589793 0.0 1.5707963267948966"/>
+    </static>
+    <static name="Fan1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.3311187484976052"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan1.obj" scale="0.3311187484976052"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan1"/>
+        <world_transform xyz="26.195371126630242 18.319044603315874 11.026373784922349" rpy="3.112831528212076 -0.30884832772603277 1.3730177100509888"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4221385750740394"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.4221385750740394"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="19.63502109538853 16.271751777316805 10.738503372522263" rpy="3.1047290936876695 -0.08615383931995901 0.9463337714098242"/>
+    </static>
+    <static name="Fan6" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.2164560464413703"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan6.obj" scale="1.2164560464413703"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan6"/>
+        <world_transform xyz="23.102054849538952 13.512493301604149 9.840812379737722" rpy="-3.0947402633385974 0.2183078346254297 -1.4056202632763013"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.3847269780374927"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.3847269780374927"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="43.81378321372945 72.23927369735807 20.554696004539196" rpy="2.9143736319412388 -0.03515268848867592 -0.40775115059636025"/>
+    </static>
+    <static name="Brain" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4112050416327635"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/brain.obj" scale="1.4112050416327635"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Brain"/>
+        <world_transform xyz="23.465551440238563 18.807197755675894 11.165740337311576" rpy="-3.0942281192687693 -0.24647892714925068 1.1286637958740737"/>
+    </static>
+    <static name="Dome" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1402411884777484"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/dome.obj" scale="1.1402411884777484"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Dome"/>
+        <world_transform xyz="15.6179847664535 27.22411082200969 13.984195981087666" rpy="2.9930264913627567 -0.18768207528736958 2.6302649639390254"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.43392073552478816"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.43392073552478816"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="26.9668592362409 24.480135678234465 12.935188997024724" rpy="2.8655028601810124 0.008667553098354208 2.836824913055805"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.25389853993715805"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.25389853993715805"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="19.096095115285163 15.772185072488778 10.67261034696488" rpy="-3.0490783082409982 -0.014824478797953455 -0.8709450080040737"/>
+    </static>
+    <static name="Horns2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0989937784050143"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns2.obj" scale="1.0989937784050143"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns2"/>
+        <world_transform xyz="26.835850292949843 13.903623402601381 10.074908550020812" rpy="2.9496084783495085 -0.10162849326917311 1.825138243180976"/>
+    </static>
+    <static name="Horns2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1050041964378314"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns2.obj" scale="1.1050041964378314"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns2"/>
+        <world_transform xyz="82.18737595408193 -71.61902283246278 13.427164881233903" rpy="2.961735394435912 0.2603098332561715 -1.1255734817620062"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.066285123891386"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.066285123891386"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="29.916686325903537 26.119956692131368 13.558296565929117" rpy="-2.947078226247736 -0.04054796073875777 0.430892989047297"/>
+    </static>
+    <static name="Brain" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.2919118568892223"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/brain.obj" scale="1.2919118568892223"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Brain"/>
+        <world_transform xyz="-34.18256381945789 34.61591618698545 17.910732869700666" rpy="-3.028688891538148 -0.1401183555039811 -2.097849993271575"/>
+    </static>
+    <static name="Dome" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0485997899358352"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/dome.obj" scale="1.0485997899358352"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Dome"/>
+        <world_transform xyz="23.149783212773556 19.046878684493755 11.192665184836013" rpy="-3.014663190676788 0.2170081130935897 -1.2860080383558454"/>
+    </static>
+    <static name="Horns1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0342128790558462"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns1.obj" scale="1.0342128790558462"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns1"/>
+        <world_transform xyz="19.63502109538853 16.271751777316805 10.738503372522263" rpy="3.1107647904362112 0.0884882292048641 -2.9359172363475934"/>
+    </static>
+    <static name="Brain" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.2344401926844137"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/brain.obj" scale="1.2344401926844137"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Brain"/>
+        <world_transform xyz="18.509712617725768 17.95434189939393 10.953371620624393" rpy="-2.9461277431368393 -0.22158491431577665 1.0248021452042047"/>
+    </static>
+    <static name="Tubes1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.062433001900325"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/tubes1.obj" scale="1.062433001900325"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Tubes1"/>
+        <world_transform xyz="50.774318383056226 -36.74526491721959 16.566347750719263" rpy="2.990912952726639 -0.15724225820705717 -0.8415988230887559"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.2950229491358476"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.2950229491358476"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="21.644163718976973 13.114103802644644 9.73250374704282" rpy="-3.103009995992721 0.1553699497765726 -0.5439622440991482"/>
+    </static>
+    <static name="Pillars" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.040631828663217"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/pillars.obj" scale="1.040631828663217"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Pillars"/>
+        <world_transform xyz="37.22847389451604 45.60184646855431 17.249033445664853" rpy="-2.920385713925907 0.18499416138703784 -1.447846719737197"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.3778920091128076"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.3778920091128076"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="22.230230933270803 30.761884969534094 14.47795985900746" rpy="-2.8219470707216807 -0.06706633253524297 0.035355424224676774"/>
+    </static>
+    <static name="Antlers" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.06989908392677"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/antlers.obj" scale="1.06989908392677"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Antlers"/>
+        <world_transform xyz="14.622489833335415 15.333472677546585 10.953734774454528" rpy="-3.029219083274369 0.16486237607751608 -0.94283301296523"/>
+    </static>
+    <static name="Cabbage" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0005098235460979"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/cabbage.obj" scale="1.0005098235460979"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Cabbage"/>
+        <world_transform xyz="30.19586566491558 -22.02020940489208 12.088455880572695" rpy="3.0539393400989128 -0.30715458262651674 -0.39685559593566455"/>
+    </static>
+    <static name="Fan5" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.38707744784467335"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan5.obj" scale="0.38707744784467335"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan5"/>
+        <world_transform xyz="27.281489080703448 -26.046794421473713 12.89079572593232" rpy="2.8624988299579384 -0.20173001884666508 -0.26692171050234714"/>
+    </static>
+    <static name="Pillars" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.499812264168871"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/pillars.obj" scale="1.499812264168871"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Pillars"/>
+        <world_transform xyz="39.109858438299405 -29.537020855421716 14.584104459039533" rpy="-2.976562184229189 0.003948634890442282 3.0370145873053263"/>
+    </static>
+    <static name="Antlers" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.317009823237537"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/antlers.obj" scale="1.317009823237537"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Antlers"/>
+        <world_transform xyz="42.54704116152415 -24.30974680396526 13.293524166567185" rpy="2.8864475018882696 -0.02908742209995463 -0.19342838774912313"/>
+    </static>
+    <static name="Fan1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.39844320414389656"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan1.obj" scale="0.39844320414389656"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan1"/>
+        <world_transform xyz="38.467739919708556 -31.078303759927852 14.912596672496617" rpy="2.8796094948243485 -0.11367325070360446 -0.7982746123714624"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5869282208899634"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.5869282208899634"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="31.36034335097587 -20.763527961603895 12.202630507022322" rpy="-2.998561641149046 -0.2861610381213171 -1.1514889554804186"/>
+    </static>
+    <static name="Antlers" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1696055095678741"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/antlers.obj" scale="1.1696055095678741"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Antlers"/>
+        <world_transform xyz="24.408127581439086 -25.128036072364463 12.082612190731474" rpy="2.9351396866924957 0.18801384704797175 1.1353517510689137"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0574301036165286"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.0574301036165286"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="40.43072965136194 -17.129873059268373 11.61577393976302" rpy="2.9621786636570366 0.00398270986109317 -0.9687207501542756"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1184929959883911"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.1184929959883911"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="40.43072965136194 -17.129873059268373 11.61577393976302" rpy="-3.040113154935492 -0.1482653183058702 3.1181849986207495"/>
+    </static>
+    <static name="Horns2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.3428284864401765"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns2.obj" scale="1.3428284864401765"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns2"/>
+        <world_transform xyz="32.03817689907309 -20.666070385686382 12.301625034773997" rpy="3.13695181717329 -0.08677261604978259 -1.6918297867266847"/>
+    </static>
+    <static name="Antlers" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.372731060971293"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/antlers.obj" scale="1.372731060971293"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Antlers"/>
+        <world_transform xyz="41.13411713861509 -21.77341390584199 12.630862404338247" rpy="-3.031750844405531 0.2240528641037427 1.774886387239095"/>
+    </static>
+    <static name="Tubes2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.225208587183303"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/tubes2.obj" scale="1.225208587183303"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Tubes2"/>
+        <world_transform xyz="41.33576897530817 -28.770615047831033 14.307001398837317" rpy="-2.887955151732375 -0.2019994803692593 -2.7678205119471513"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4089597026156"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.4089597026156"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="28.631261721988484 -25.03418318976194 12.744062075422333" rpy="-3.03776171071939 -0.30994774594980123 -1.449148297416845"/>
+    </static>
+    <static name="Horns1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.391944426644879"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns1.obj" scale="1.391944426644879"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns1"/>
+        <world_transform xyz="33.43178403080117 -20.03392490419862 12.200794911033546" rpy="-3.0898063487576577 -0.0698105123059547 -2.3843863524909885"/>
+    </static>
+    <static name="Fan6" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0803111751213823"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan6.obj" scale="1.0803111751213823"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan6"/>
+        <world_transform xyz="39.83762765573155 -15.459573600150605 11.614927082554367" rpy="-3.0853610017138804 -0.19183562811221622 -3.035107498254925"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.3626149065516483"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.3626149065516483"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="37.27252423406036 -31.477922510492306 15.12673063600074" rpy="3.1351660009522346 -0.2895151363919095 -1.4864018711477265"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4943259897239853"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.4943259897239853"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="33.566897033124434 -22.494123526341 12.739120249259196" rpy="-2.9177694123448212 -0.17872881313775024 -2.1206764542436667"/>
+    </static>
+    <static name="Dome" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0003558984255045"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/dome.obj" scale="1.0003558984255045"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Dome"/>
+        <world_transform xyz="34.5484922266155 -29.748555866887628 14.41690282548072" rpy="-2.862566071649846 -0.09151114539501215 -2.8011305826980832"/>
+    </static>
+    <static name="Horns2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.3453955007396"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/horns2.obj" scale="1.3453955007396"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Horns2"/>
+        <world_transform xyz="34.15746422359127 -25.528647168947703 13.42253054499571" rpy="3.0038131888676434 0.004500248758309011 0.15570340919426118"/>
+    </static>
+    <static name="Fan3" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.2998751950434195"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan3.obj" scale="0.2998751950434195"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan3"/>
+        <world_transform xyz="24.408127581439086 -25.128036072364463 12.082612190731474" rpy="-2.8866624640787872 0.11294050039585013 3.1401500785890906"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0169893256578666"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.0169893256578666"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="17.839794315486724 12.290834614651326 10.367431058519855" rpy="-2.9895564699796626 -0.06777260621137327 1.4948193324628416"/>
+    </static>
+    <static name="Fan1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5103535482987365"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan1.obj" scale="0.5103535482987365"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan1"/>
+        <world_transform xyz="55.77947075732024 -69.06537247839236 20.367651016216204" rpy="-3.037642945426885 0.14564212197784654 -0.553769852022897"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4608483911729833"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.4608483911729833"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="-20.151384235999625 -18.437467208729963 14.704182413876428" rpy="-3.0984767232995822 -0.11951297607797473 1.5277393126611098"/>
+    </static>
+    <static name="Fan2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5795999565970615"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan2.obj" scale="0.5795999565970615"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan2"/>
+        <world_transform xyz="21.602927200000288 11.193263500306221 9.535160342366478" rpy="-3.1189203871818703 0.09001521715942506 -0.29468829998409923"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.046691425760002"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.046691425760002"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="19.214928914688024 20.291829996484108 11.57794485815508" rpy="-3.060952655706746 -0.25004200812425914 1.3786131928665784"/>
+    </static>
+    <static name="Tubes2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4080561380926115"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/tubes2.obj" scale="1.4080561380926115"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Tubes2"/>
+        <world_transform xyz="14.040268634846052 16.440156722971373 11.252913814888528" rpy="-2.84709932546621 -0.21796606418522857 1.0422701679209034"/>
+    </static>
+    <static name="Fan5" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5386802635533386"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan5.obj" scale="0.5386802635533386"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan5"/>
+        <world_transform xyz="20.391596126878714 15.450649939342274 10.627802528741604" rpy="-3.128557473543508 -0.3225357536682798 1.98223092459626"/>
+    </static>
+    <static name="Fan4" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5571517637419992"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan4.obj" scale="0.5571517637419992"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan4"/>
+        <world_transform xyz="7.854881770701555 17.227068164806116 12.78645308792357" rpy="3.117797905905887 0.4093707500403032 -0.7796459581217834"/>
+    </static>
+    <static name="Flower" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0021655181785143"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/flower.obj" scale="1.0021655181785143"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Flower"/>
+        <world_transform xyz="88.1664677819432 -97.90833330971027 12.256214346563784" rpy="-3.041980120577401 0.035113616697945105 2.299177889011156"/>
+    </static>
+    <static name="Dome" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0171190014714462"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/dome.obj" scale="1.0171190014714462"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Dome"/>
+        <world_transform xyz="13.217479640612765 22.73942716565603 13.235559696976406" rpy="-3.025583958128212 0.1669143762172174 -0.039899852752533264"/>
+    </static>
+    <static name="Fan1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.5675361291618384"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan1.obj" scale="0.5675361291618384"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan1"/>
+        <world_transform xyz="-73.52065363969017 -21.158325908833326 11.394750263352751" rpy="-2.9799673884240403 -0.15684589486705702 1.1775620009983718"/>
+    </static>
+    <static name="Fan3" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.27082520554288925"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan3.obj" scale="0.27082520554288925"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan3"/>
+        <world_transform xyz="65.43836330006582 -69.10961695111833 18.481833082392566" rpy="-3.0766574223042555 -0.29110161497275344 2.633223861683793"/>
+    </static>
+    <static name="Pillars" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.099999274361073"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/pillars.obj" scale="1.099999274361073"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Pillars"/>
+        <world_transform xyz="23.550387941134144 15.910247170101302 10.441370097631962" rpy="3.0944790831605555 -0.2749756530587584 1.9651061378224601"/>
+    </static>
+    <static name="Fan1" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="0.3434168858243657"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan1.obj" scale="0.3434168858243657"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan1"/>
+        <world_transform xyz="16.896200957842908 21.87574254686383 12.548947694484013" rpy="-3.1130319843638903 0.3383965898986272 -1.2897858732216791"/>
+    </static>
+    <static name="Antlers" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.0285337364325757"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/antlers.obj" scale="1.0285337364325757"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Antlers"/>
+        <world_transform xyz="20.094775386469163 8.694434484658705 9.533367971758873" rpy="-3.0520361036190677 0.0530403531643191 0.2937181669730244"/>
+    </static>
+    <static name="Cabbage" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1179080132720158"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/cabbage.obj" scale="1.1179080132720158"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Cabbage"/>
+        <world_transform xyz="91.77624230721527 86.98966948258662 11.625808333999522" rpy="-2.9829337826747397 -0.1501747034423102 -0.5106008078051534"/>
+    </static>
+    <static name="Fan6" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.1895572633974076"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/fan6.obj" scale="1.1895572633974076"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Fan6"/>
+        <world_transform xyz="17.807413765382353 8.638187575847885 9.930537795796077" rpy="-3.077613263135898 0.14229906193774222 -0.28538602103725697"/>
+    </static>
+    <static name="Tubes2" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.4553555348652356"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/tubes2.obj" scale="1.4553555348652356"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Tubes2"/>
+        <world_transform xyz="13.070409343303364 13.210229629665399 10.913567891770631" rpy="2.925816553368061 0.2372524421360549 -1.244650509707029"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.3713869211985794"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.3713869211985794"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="20.391596126878714 15.450649939342274 10.627802528741604" rpy="-2.8308451257922305 0.08879665745237886 0.183120354022045"/>
+    </static>
+    <static name="Whip" type="model">
+        <physical>
+            <mesh filename="scenes/physics/forcefield.obj" scale="1.2843411681252652"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </physical>
+        <visual>
+            <mesh filename="scenes/corals/whip.obj" scale="1.2843411681252652"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <material name="Rock"/>
+        <look name="Whip"/>
+        <world_transform xyz="11.522779872019788 13.629978251844253 11.531600668003977" rpy="2.9643876212545988 -0.03102298706984219 -2.188549651583213"/>
+    </static>
+</scenario>
