@@ -66,23 +66,6 @@ MyManager::MyManager(sf::Scalar rate, std::string scenarioPath) : ROSSimulationM
     std::cout << rate << "\n";
     std::cout << scenarioPath << "\n";
 
-    std::string models_dir = "/home/jad/stonefish_ws/src/estonefish-scenes/data/";
-
-    // ObjectDetailsParser objects_details_parser(
-    //     scenario_path,
-    //     models_dir);
-
-    // collisison enc inside scenario parser
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    // cEnv.addCollisionSphere({0.0, 0.0, 2.0}, 2.5);
-    cEnv.addCollisionSphere({0.0, -2.0, 5.0}, 3.5);
-    cEnv.addCollisionSphere({4.0, 2.0, 5.0}, 3.5);
-    cEnv.addCollisionSphere({-4.0, 2.0, 5.0}, 3.5);
-
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Building cEnv took = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
-    cEnv.writeMaptoFile("/home/srealper/ros_ws/doc_ws/forcemap.bt");
-
     // leader_traj = new sf::ManualTrajectory();
     timer = nh.createTimer(ros::Duration(1.0 / 30.0), &MyManager::timerCb, this, false, false);
 }
@@ -131,13 +114,12 @@ void MyManager::computeEnvForce(std::shared_ptr<Flock> flock)
         }
 
         // seafloor collision check
-
-        if (boid.position.z() > 4.5)
-        {
-            // std::cout << "near surface limit, pushing up" << "\n";
-            float repulsion = -1 / (abs(4.9 - boid.position.z()) + __FLT_EPSILON__);
-            boid.addExternalForce({0, 0, repulsion}, 1);
-        }
+        // if (boid.position.z() > 4.5)
+        // {
+        //     // std::cout << "near surface limit, pushing up" << "\n";
+        //     float repulsion = -1 / (abs(4.9 - boid.position.z()) + __FLT_EPSILON__);
+        //     boid.addExternalForce({0, 0, repulsion}, 1);
+        // }
     }
 }
 
@@ -317,17 +299,29 @@ void MyManager::BuildScenario()
     if (!success2)
         ROS_ERROR("Parser log file '%s' could not be saved!", logFilePath.c_str());
 
-    // Create object
-    CreateLook("red", sf::Color::RGB(1.f, 0.f, 0.f), 0.1f, 0.f);
-    sf::Scalar angle = M_PI / 180.0 * 14.1;
-    sf::BodyPhysicsSettings phy;
-    phy.mode = sf::BodyPhysicsMode::DISABLED;
-    phy.collisions = true;
-    sf::Box *box = new sf::Box("myBox", phy, sf::Vector3(1, 1, 1), sf::I4(), "Steel", "red");
-    AddSolidEntity(box, sf::Transform(sf::Quaternion(0, angle, 0), sf::Vector3(3.0, 3.0, 6.0)));
+    ObjectDetailsParser scnparser(scnFilePath, sf::GetDataPath());
+    auto objects = scnparser.iterateSceneModels(scnFilePath, sf::GetDataPath());
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    for (auto &mdata : objects)
+    {
+        mdata.print();
+        switch (mdata.type)
+        {
+        case ModelData::ModelType::MESH:
+            cEnv.addCollisionSphere({mdata.translation[0], mdata.translation[1], mdata.translation[2]}, 3.5);
+            break;
+        case ModelData::ModelType::SURFACE:
+            cEnv.addCollisionSurface(mdata.points, mdata.normals);
+            break;
 
-    // OctreeScn octo;
-    // octo.genOctreeScn(this);
+        default:
+            break;
+        }
+    }
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Building cEnv took = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    cEnv.writeMaptoFile("/home/srealper/ros_ws/doc_ws/forcemap.bt");
 
     MakeFishes();
     timer.start();

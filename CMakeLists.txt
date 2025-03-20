@@ -36,10 +36,19 @@ message("4 ${OMPL_LIBRARY_DIR}")
 message("5 ${OMPL_LIBRARIES}")
 message("OMPL version ${OMPL_VERSION}")
 
-find_package(PCL REQUIRED)
-message("PCL print")
-message("PCL found? ${PCL_FOUND}")
-message("PCL version ${PCL_VERSION}")
+# find_package(PCL REQUIRED)
+# message("PCL print")
+# message("PCL found? ${PCL_FOUND}")
+# message("PCL version ${PCL_VERSION}")
+
+find_package(Open3D REQUIRED)
+message("Open3D print")
+message("Open3D found? ${Open3D_FOUND}")
+message("Open3D version ${Open3D_VERSION}")
+message("2 ${Open3D_INCLUDE_DIRS}")
+message("3 ${Open3D_LIBRARY_DIRS}")
+message("4 ${Open3D_LIBRARY_DIR}")
+message("5 ${Open3D_LIBRARIES}")
 
 list(APPEND CATKIN_SOURCES
     roscpp
@@ -91,6 +100,7 @@ list(APPEND INCLUDES
   ${Boost_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${OMPL_INCLUDE_DIRS}
+  ${Open3D_INCLUDE_DIRS}
   )
 
 include_directories(SYSTEM ${INCLUDES})
@@ -109,22 +119,26 @@ add_library(${PROJECT_NAME}
   src/Line.cpp
   src/OcForceTree.cpp
   src/CollisionEnv.cpp
+  src/environment/ScnParser.cpp
 )
 
 # add_dependencies(stonefish_boids ${${PROJECT_NAME}_EXPORTED_TARGETS})
-target_link_libraries(stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+target_link_libraries(stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish Open3D::Open3D)
 
 add_executable(viz_boids scripts/viz_boids.cpp)
 target_link_libraries(viz_boids stonefish_boids)
 
-add_executable(stonefish_node scripts/stonefish_node.cpp)
-target_link_libraries(stonefish_node stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+# add_executable(stonefish_node scripts/stonefish_node.cpp)
+# target_link_libraries(stonefish_node stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
-add_executable(stonefish_node2 scripts/stonefish_node2.cpp)
-target_link_libraries(stonefish_node2 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+# add_executable(stonefish_node2 scripts/stonefish_node2.cpp)
+# target_link_libraries(stonefish_node2 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
 
-add_executable(stonefish_node3 scripts/stonefish_node3.cpp)
-target_link_libraries(stonefish_node3 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+# add_executable(stonefish_node3 scripts/stonefish_node3.cpp)
+# target_link_libraries(stonefish_node3 stonefish_boids ${catkin_LIBRARIES} ${LIBRARIES} Stonefish::Stonefish)
+
+add_executable(stonefish_node4 scripts/stonefish_node4.cpp)
+target_link_libraries(stonefish_node4 stonefish_boids)
 
 # add_script(test scripts)
 
