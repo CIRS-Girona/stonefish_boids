@@ -4,7 +4,7 @@ CollisionEnv::CollisionEnv()
 {
     std::cout << "default collision env constructor" << "\n";
 
-    resolution_ = 0.2;
+    resolution_ = 0.8;
     collisionTree = std::make_shared<OcForceTree>(resolution_);
 }
 
@@ -43,6 +43,17 @@ void CollisionEnv::addCollisionSphere(const Eigen::Vector3f &center, double radi
     }
     collisionTree->updateInnerOccupancy(); // Ensure consistency in octree
     // collisionTree->prune();
+}
+
+void CollisionEnv::addCollisionSurface(const std::vector<Eigen::Vector3f> &points,
+                                       const std::vector<Eigen::Vector3d> &normals)
+{
+    int i = 0;
+    for (auto &point : points)
+    {
+        auto node = collisionTree->updateNode(octomap::point3d(point.x(), point.y(), point.z()), true, true);
+        node->setForce(normals[i].cast<float>());
+    }
 }
 
 bool CollisionEnv::writeMaptoFile(std::string filepath)
