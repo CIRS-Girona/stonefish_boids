@@ -29,7 +29,7 @@ struct Flock
     std::vector<sf::ManualTrajectory *> boidTrajs;
     sf::ManualTrajectory *leaderTraj;
     std::vector<Eigen::Vector3f> leaderPath;
-    int leaderPathIndex;
+    int leaderPathIndex = 0;
 };
 
 class MyManager : public sf::ROSSimulationManager
@@ -127,7 +127,7 @@ void MyManager::UpdateGroup(std::shared_ptr<Flock> flock)
 {
     // std::cout << flock->flockName << "\n";
 
-    if (flock->leaderPathIndex > flock->leaderPath.size() - 1)
+    if (flock->leaderPathIndex == flock->leaderPath.size())
     {
         std::reverse(flock->leaderPath.begin(), flock->leaderPath.end());
         flock->leaderPathIndex = 0;
