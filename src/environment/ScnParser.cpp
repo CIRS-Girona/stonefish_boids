@@ -48,7 +48,7 @@ std::vector<ModelData> ObjectDetailsParser::iterateSceneModels(const std::string
         obj_path = static_node->first_node("visual")->first_node("mesh")->first_attribute("filename");
 
         auto model_path = models_dir + obj_path->value();
-        ObjectDetailsParser::loadModelGetSize(model_path);
+        // ObjectDetailsParser::loadModelGetSize(model_path);
 
         obj_scale = static_node->first_node("visual")->first_node("mesh")->first_attribute("scale");
         mdata.scale = atof(obj_scale->value());
