@@ -21,29 +21,23 @@ boids_settings:
     neighborCellsize: 0.3
     mass : 1.0
 
-  # - name: "bluefin"
-  #   modelPath: "creatures/bluefish/bluefish.obj"
-  #   texturePath: "creatures/bluefish/bluefish.png"
-  #   numboids: 15
-  #   alignmentWeight: 0.1
-  #   cohesionWeight: 0.1
-  #   separationWeight: 0.2
-  #   leaderAttractionWeight: 0.1
-  #   maxSpeed: 1.5
-  #   perceptionRadius : 0.4
-  #   separationRadius : 0.5
-
-  # - name: "yellowtang"
-  #   modelPath: "creatures/yellowtang/yellowtang.obj"
-  #   texturePath: "creatures/yellowtang/yellowtang.png"
-  #   numboids: 10
-  #   alignmentWeight: 0.1
-  #   cohesionWeight: 0.2
-  #   separationWeight: 0.3
-  #   leaderAttractionWeight: 0.2
-  #   maxSpeed: 2.0
-  #   perceptionRadius : 0.3
-  #   separationRadius : 0.45
+  - name: "bluefin"
+    modelPath: "creatures/bluefish/bluefish.obj"
+    texturePath: "creatures/bluefish/bluefish.png"
+    modelScale: 5.0
+    numboids: 50
+    spawnPoint: [5.0, 5.0, 5.0]
+    endPoint: [-5.0, 5.0, 2.0]
+    alignmentWeight: 0.1
+    cohesionWeight: 1.0
+    separationWeight: 2.0
+    leaderAttractionWeight: 2.0
+    maxSpeed: 2.0
+    maxAccel: 5.0
+    perceptionRadius : 0.5
+    separationRadius : 0.7
+    neighborCellsize: 0.3
+    mass : 1.0
 
   - name: "yellowtang"
     modelPath: "creatures/yellowtang/yellowtang.obj"
