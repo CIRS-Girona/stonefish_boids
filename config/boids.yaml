@@ -8,6 +8,8 @@ boids_settings:
     texturePath: "creatures/reddisc/reddisc.png"
     modelScale: 2.0
     numboids: 50
+    spawnPoint: [-2.72, -0.05, 4.0]
+    endPoint: [4.0, 4.0, 2.0]
     alignmentWeight: 0.1
     cohesionWeight: 1.0
     separationWeight: 2.0
@@ -48,6 +50,8 @@ boids_settings:
     texturePath: "creatures/yellowtang/yellowtang.png"
     modelScale: 1.0
     numboids: 50
+    spawnPoint: [2.72, 0.05, 5.0]
+    endPoint: [-4.0, -4.0, 2.0]
     alignmentWeight: 0.1
     cohesionWeight: 1.0
     separationWeight: 2.0
