@@ -29,7 +29,7 @@
 	<static name="Seabed" type="plane">
 		<material name="Rock"/>
 		<look name="seabed" uv_scale="5.0"/>
-		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 5.0"/>
+		<world_transform rpy="0.0 0.0 0.0" xyz="0.0 0.0 6.0"/>
 	</static>
 
 
@@ -65,7 +65,7 @@
 		</visual>
 		<material name="Rock"/>
 		<look name="Brain"/>
-		<world_transform xyz="0 0 5" rpy="3.1416 0 0"/>
+		<world_transform xyz="0 0 6" rpy="3.1416 0 0"/>
 	</static>
 
 	<static name="Brain2" type="model">
@@ -79,7 +79,7 @@
 		</visual>
 		<material name="Rock"/>
 		<look name="Brain"/>
-		<world_transform xyz="4 4 5" rpy="3.1416 0 0"/>
+		<world_transform xyz="4 4 6" rpy="3.1416 0 0"/>
 	</static>
 
 	<static name="Brain3" type="model">
@@ -93,7 +93,7 @@
 		</visual>
 		<material name="Rock"/>
 		<look name="Brain"/>
-		<world_transform xyz="-4 4 5" rpy="3.1416 0 0"/>
+		<world_transform xyz="-4 4 6" rpy="3.1416 0 0"/>
 	</static>
 
 
