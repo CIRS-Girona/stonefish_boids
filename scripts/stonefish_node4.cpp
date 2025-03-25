@@ -268,9 +268,9 @@ void MyManager::MakeFishes()
 
             anim = new sf::AnimatedEntity("AnimMesh" + std::to_string(i), flock->boidTrajs.at(i),
                                           sf::GetDataPath() + std::string(boids_cfg[b]["modelPath"]),
-                                          1.0, sf::I4(),
+                                          double(boids_cfg[b]["modelScale"]), sf::I4(),
                                           sf::GetDataPath() + std::string(boids_cfg[b]["modelPath"]),
-                                          1.0, sf::I4(), "Neutral", flock->flockName + "tex");
+                                          double(boids_cfg[b]["modelScale"]), sf::I4(), "Neutral", flock->flockName + "tex");
             AddAnimatedEntity(anim);
         }
         b++;

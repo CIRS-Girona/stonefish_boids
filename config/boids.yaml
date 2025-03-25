@@ -11,6 +11,7 @@ boids_settings:
   - name: "reddisc"
     modelPath: "creatures/reddisc/reddisc.obj"
     texturePath: "creatures/reddisc/reddisc.png"
+    modelScale: 2.0
     numboids: 50
     alignmentWeight: 0.1
     cohesionWeight: 1.0
@@ -50,6 +51,7 @@ boids_settings:
   - name: "yellowtang"
     modelPath: "creatures/yellowtang/yellowtang.obj"
     texturePath: "creatures/yellowtang/yellowtang.png"
+    modelScale: 1.0
     numboids: 50
     alignmentWeight: 0.1
     cohesionWeight: 1.0
